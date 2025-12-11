@@ -62,8 +62,8 @@ export default function App() {
         onPageChange={handlePageChange}
       />
       <main className="flex-1 ml-64">
-          <Navigation />
         <div className="max-w-4xl mx-auto px-12 py-16">
+          <Navigation />
           {renderPage()}
           <Footer />
         </div>

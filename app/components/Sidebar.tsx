@@ -1,4 +1,3 @@
-import { Lock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -12,7 +11,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
     { id: 'introduction', label: 'Introduction', section: null },
     { section: 'Getting Started' },
     { id: 'authentication', label: 'Authentication', parent: 'Getting Started' },
-    { id: 'generate-api-key', label: 'Generate API Key', parent: 'Getting Started',},
+    { id: 'generate-api-key', label: 'Generate API Key', parent: 'Getting Started' },
     { section: 'Build Guides' },
     { id: 'build-chat', label: 'Build a Realtime Chat App', parent: 'Build Guides' },
     { section: 'Core Concepts' },
@@ -28,58 +27,83 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
   ];
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-78 bg-black border-r border-white/10 overflow-y-auto">
-      <div className="p-8">
-        <div className="mb-12">
-          <h1 className="text-white tracking-tight">
-          <Link href="/" className="text-xl font-bold flex items-center justify-center mb-8">
-            <Image 
-              src="/velyx-logo.png" 
-              alt="velyx"
-              width={75}
-              height={75}
-            />
-            {/* <div className='m-2'>Velyx</div> */}
+    <aside
+      className="
+        fixed top-0 left-0 h-screen w-72
+        bg-[#000000] 
+        border-r border-neutral-900
+        overflow-y-auto 
+        px-6 py-8
+      "
+      style={{ scrollbarWidth: 'none' }}
+    >
+      {/* Logo Block */}
+      <div className="flex flex-col items-center mb-10">
+        <Link href="/" className="flex justify-center items-center mb-3">
+          <Image src="/velyx-logo.png" alt="velyx" width={80} height={80} className="opacity-90" />
         </Link>
-          </h1>
-          <p className="text-white/40 text-sm mt-1 text-center">Infrastructure for Realtime Experiences</p>
-        </div>
 
-        <nav className="space-y-1">
-          {navItems.map((item, index) => {
-            if ('section' in item && item.section) {
-              return (
-                <div key={index} className="pt-6 pb-2 text-white/40 text-xs uppercase tracking-wider">
-                  {item.section}
-                </div>
-              );
-            }
-
-            const isActive = activePage === item.id;
-            const isLocked = 'locked' in item && item.locked;
-
-            return (
-              <button
-                key={item.id}
-                onClick={() => onPageChange(item.id!)}
-                className={`
-                  w-full text-left px-3 py-2 rounded-md text-sm transition-all duration-200
-                  ${isActive 
-                    ? 'bg-[#0066FF] text-white' 
-                    : isLocked
-                    ? 'text-white/30 cursor-not-allowed'
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                  }
-                  ${item.parent ? 'ml-3' : ''}
-                  flex items-center justify-between
-                `}
-              >
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+        <p className="text-neutral-500 text-xs text-center tracking-wide">
+          Infrastructure for Realtime Experiences
+        </p>
       </div>
+
+      {/* Nav */}
+      <nav className="space-y-1">
+        {navItems.map((item, index) => {
+          if ("section" in item && item.section) {
+            return (
+              <div
+                key={index}
+                className="
+                  pt-6 pb-2 
+                  text-neutral-500 
+                  text-[11px] 
+                  uppercase 
+                  tracking-wider 
+                  font-medium
+                "
+              >
+                {item.section}
+              </div>
+            );
+          }
+
+          const isActive = activePage === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => onPageChange(item.id!)}
+              className={`
+                w-full text-left rounded-md text-sm
+                flex items-center relative
+                px-3 py-2
+
+                ${item.parent ? "ml-2" : ""}
+
+                ${isActive
+                  ? "text-white bg-neutral-900/60"
+                  : "text-neutral-400 hover:text-white hover:bg-neutral-900/40"
+                }
+              `}
+            >
+              {/* Active Left Bar (Vercel style) */}
+              {isActive && (
+                <span
+                  className="
+                    absolute left-0 top-0 h-full w-[3px]
+                    bg-white
+                    rounded-r-sm
+                  "
+                />
+              )}
+
+              {item.label}
+            </button>
+          );
+        })}
+      </nav>
     </aside>
   );
 }
