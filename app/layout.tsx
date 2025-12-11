@@ -4,6 +4,8 @@ import "./globals.css";
 // import { Providers } from "./providers";
 import { getSession } from "@/auth"
 import Providers from "./providers"
+import "./styles/prism.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

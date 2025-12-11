@@ -1,5 +1,6 @@
-'use client'
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Introduction } from './components/pages/Introduction';
 import { Authentication } from './components/pages/Authentication';
@@ -19,54 +20,45 @@ import { Navigation } from './components/Navigation';
 export default function App() {
   const [activePage, setActivePage] = useState('introduction');
 
-  const handlePageChange = (page: string) => {
-    setActivePage(page);
-  };
-
-
   const renderPage = () => {
     switch (activePage) {
-      case 'introduction':
-        return <Introduction />;
-      case 'authentication':
-        return <Authentication />;
-      case 'generate-api-key':
-        return <GenerateAPIKey />;
-      case 'build-chat':
-        return <BuildChat />;
-      case 'websocket-connections':
-        return <WebSocketConnections />;
-      case 'reconnection-guide' :
-        return <ReconnectionGuide />
-      case 'topics-subscriptions':
-        return <TopicsSubscriptions />;
-      case 'publishing-events':
-        return <PublishingEvents />;
-      case 'websocket-api':
-        return <WebSocketAPI />;
-      case 'http-publish-api':
-        return <HTTPPublishAPI />;
-      case 'sdks':
-        return <SDKs />;
-      case 'support':
-        return <Support />;
-      default:
-        return <Introduction />;
+      case 'introduction': return <Introduction />;
+      case 'authentication': return <Authentication />;
+      case 'generate-api-key': return <GenerateAPIKey />;
+      case 'build-chat': return <BuildChat />;
+      case 'websocket-connections': return <WebSocketConnections />;
+      case 'reconnection-guide': return <ReconnectionGuide />;
+      case 'topics-subscriptions': return <TopicsSubscriptions />;
+      case 'publishing-events': return <PublishingEvents />;
+      case 'websocket-api': return <WebSocketAPI />;
+      case 'http-publish-api': return <HTTPPublishAPI />;
+      case 'sdks': return <SDKs />;
+      case 'support': return <Support />;
+      default: return <Introduction />;
     }
   };
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <Sidebar 
-        activePage={activePage} 
-        onPageChange={handlePageChange}
+
+      {/* Sidebar (Client Component) */}
+      <Sidebar
+        activePage={activePage}
+        onPageChange={setActivePage}
       />
+
+      {/* MAIN AREA */}
       <main className="flex-1 ml-64">
+
+        {/* Navigation MUST be outside content wrapper */}
+        <Navigation />
+
+        {/* Content */}
         <div className="max-w-4xl mx-auto px-12 py-16">
-          <Navigation />
           {renderPage()}
           <Footer />
         </div>
+
       </main>
     </div>
   );

@@ -75,7 +75,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
             <button
               key={item.id}
               onClick={() => onPageChange(item.id!)}
-              className={`
+              className={` cursor-pointer
                 w-full text-left rounded-md text-sm
                 flex items-center relative
                 px-3 py-2

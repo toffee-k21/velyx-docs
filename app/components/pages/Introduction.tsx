@@ -1,101 +1,159 @@
+"use client";
+
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 export function Introduction() {
-  return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-white text-2xl mb-6">Velyx — Infrastructure for Realtime Experiences</h1>
-        <p className="text-white/60 text-lg">
-          The modern real-time delivery layer for high-performance applications.
-        </p>
-      </div>
-
-      <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-      <div className="space-y-6">
-        <p className="text-white/80">
-          Velyx is a fully managed real-time infrastructure that handles all the complexity of WebSocket connections, 
-          message routing, fan-out, and horizontal scaling. Built for developers who need bulletproof real-time 
-          functionality without the operational overhead.
-        </p>
-
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 space-y-4">
-          <h2 className="text-white">What Velyx Handles</h2>
-          <ul className="space-y-2 text-white/70">
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>WebSocket connection management and lifecycle</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Topic-based routing and subscription mapping</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Horizontal scaling and load distribution</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Message fan-out to thousands of subscribers</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Built-in heartbeats and connection health monitoring</span>
-            </li>
-            {/* <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Global edge distribution for minimal latency</span>
-            </li> */}
-          </ul>
-        </div>
-
-        <div className="bg-[#0066FF]/10 border border-[#0066FF]/30 rounded-lg p-6 space-y-3">
-          <h3 className="text-white">Your Responsibility: Just Two Things</h3>
-          <div className="space-y-4 text-white/80">
-            <div>
-              <span className="text-[#0066FF]">1. Backend:</span> Send events to Velyx when something happens
-            </div>
-            <div>
-              <span className="text-[#0066FF]">2. Frontend:</span> Update your UI when events arrive
-            </div>
-          </div>
-        </div>
-
-        <p className="text-white/80">
-          No more managing WebSocket servers, dealing with connection pools, or worrying about scaling. 
-          Velyx provides a simple publish-subscribe model that just works, from 10 to 10 million concurrent connections.
-        </p>
-      </div>
-
-      <div className="pt-8">
-        <h2 className="text-white mb-4 text-2xl">Quick Example</h2>
-        <div className="bg-black border border-white/10 rounded-lg p-5 space-y-3">
-          <div className="text-white/40 text-sm">Frontend - Connect and subscribe</div>
-          <pre className="text-white/80 text-sm overflow-x-auto">
-            <code>{`const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_KEY");
+  const frontendCode = `const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_KEY");
 ws.onopen = () => {
   ws.send(JSON.stringify({
     action: "subscribe",
     topic: "notifications:user-123"
   }));
-};`}</code>
-          </pre>
-        </div>
+};`;
 
-        <div className="bg-black border border-white/10 rounded-lg p-5 space-y-3 mt-4">
-          <div className="text-white/40 text-sm">Backend - Publish an event</div>
-          <pre className="text-white/80 text-sm overflow-x-auto">
-            <code>{`POST https://velyx.io/publish
+  const backendCode = `POST https://velyx.io/publish
 x-api-key: YOUR_API_KEY
 
 {
   "topic": "notifications:user-123",
   "data": { "message": "Your order has shipped!" }
-}`}</code>
-          </pre>
-        </div>
+}`;
+
+  /* Reusable shared style */
+  const codeStyle = {
+    background: "transparent",
+    margin: 0,
+    padding: "0",
+    fontSize: "13.5px",
+    lineHeight: "1.7",
+    overflowX: "auto",
+  };
+
+  const codeTagProps = {
+    style: {
+      background: "transparent",
+      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+      whiteSpace: "pre",
+    },
+  };
+
+  return (
+    <div className="space-y-12 max-w-3xl">
+
+      {/* ---- Title ---- */}
+      <div className="space-y-3">
+        <h1 className="text-3xl font-semibold text-white tracking-tight">
+          Velyx — Infrastructure for Realtime Experiences
+        </h1>
+
+        <p className="text-neutral-400 text-lg leading-relaxed">
+          The modern real-time delivery layer for high-performance applications.
+        </p>
       </div>
 
-      <div className="pt-4 text-white/50 text-sm">
-        Continue to <span className="text-[#0066FF]">Getting Started → Authentication</span> to begin building with Velyx.
+      {/* Divider */}
+      <div className="h-px bg-neutral-800" />
+
+      {/* ---- Description ---- */}
+      <div className="space-y-8">
+
+        <p className="text-neutral-300 leading-relaxed">
+          Velyx is a fully managed real-time infrastructure that handles all the
+          complexity of WebSocket connections, message routing, fan-out, and
+          horizontal scaling.
+        </p>
+
+        {/* What Velyx Handles */}
+        <div className="bg-[#111111] border border-neutral-800 rounded-lg p-6 space-y-4">
+          <h2 className="text-white text-lg font-medium">What Velyx Handles</h2>
+
+          <ul className="space-y-2 text-neutral-300">
+            {[
+              "WebSocket connection management and lifecycle",
+              "Topic-based routing and subscription mapping",
+              "Horizontal scaling and load distribution",
+              "Message fan-out to thousands of subscribers",
+              "Built-in heartbeats and connection health monitoring",
+            ].map((text, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="text-neutral-500 mt-1">•</span>
+                <span>{text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Responsibilities */}
+        <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 space-y-4">
+          <h3 className="text-white text-lg font-medium">
+            Your Responsibility: Just Two Things
+          </h3>
+
+          <div className="space-y-3 text-neutral-300">
+            <div>
+              <span className="text-neutral-200 font-medium">1. Backend:</span>{" "}
+              Send events to Velyx when something happens
+            </div>
+            <div>
+              <span className="text-neutral-200 font-medium">2. Frontend:</span>{" "}
+              Update your UI when events arrive
+            </div>
+          </div>
+        </div>
+
+        <p className="text-neutral-300 leading-relaxed">
+          No more managing WebSocket servers or scaling concerns. Velyx just works.
+        </p>
+      </div>
+
+      {/* ---- Code Examples ---- */}
+      <div className="pt-6 space-y-8">
+
+        {/* Frontend Example */}
+        <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
+          <div className="text-neutral-500 text-sm">Frontend – Connect and subscribe</div>
+
+          <div className="rounded-md overflow-hidden">
+            <SyntaxHighlighter
+              language="javascript"
+              style={oneDark}
+              wrapLines={true}
+              wrapLongLines={true}
+              customStyle={codeStyle}
+              codeTagProps={codeTagProps}
+            >
+              {frontendCode}
+            </SyntaxHighlighter>
+          </div>
+        </div>
+
+        {/* Backend Example */}
+        <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
+          <div className="text-neutral-500 text-sm">Backend – Publish an event</div>
+
+          <div className="rounded-md overflow-hidden">
+            <SyntaxHighlighter
+              language="http"
+              style={oneDark}
+              wrapLines={true}
+              wrapLongLines={true}
+              customStyle={codeStyle}
+              codeTagProps={codeTagProps}
+            >
+              {backendCode}
+            </SyntaxHighlighter>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Footer */}
+      <div className="pt-4 text-neutral-500 text-sm">
+        Continue to{" "}
+        <span className="text-white underline-offset-2 hover:underline cursor-pointer">
+          Getting Started → Authentication
+        </span>.
       </div>
     </div>
   );

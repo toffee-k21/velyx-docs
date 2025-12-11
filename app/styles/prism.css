@@ -1,0 +1,65 @@
+/* Vercel Matte Dark */
+code[class*="language-"],
+pre[class*="language-"] {
+    color: #e5e5e5;
+    background: #000;
+    border: 1px solid #1a1a1a;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* Comments */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6b7280;
+}
+
+/* Keywords (import, const, return) */
+.token.keyword {
+    color: #ff6363;
+    /* red-ish */
+}
+
+/* Strings */
+.token.string {
+    color: #4ade80;
+    /* green */
+}
+
+/* Types */
+.token.class-name,
+.token.builtin,
+.token.constant {
+    color: #c084fc;
+    /* purple */
+}
+
+/* Function names */
+.token.function {
+    color: #60a5fa;
+    /* blue-ish */
+}
+
+/* Numbers */
+.token.number {
+    color: #facc15;
+    /* yellow */
+}
+
+/* Operators */
+.token.operator,
+.token.punctuation {
+    color: #e5e5e5;
+}
+
+/* JSON keys */
+.token.property {
+    color: #93c5fd;
+    /* light blue */
+}
