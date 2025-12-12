@@ -1,15 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, EyeOff, Copy, RefreshCw, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, Copy, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+interface KeyEntry {
+  id: string;
+  apiKey: string;
+  appName: string;
+  createdAt: string;
+  revoked: boolean;
+}
 
 export function GenerateAPIKey() {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [appName, setAppName] = useState("");
+  const [keys, setKeys] = useState<KeyEntry[]>([]);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
   const { data: session } = useSession();
 
   if (!session) {
@@ -20,56 +32,66 @@ export function GenerateAPIKey() {
     );
   }
 
-  // Helpers
-  const generateKey = () => {
-    const key =
-      "vx_" +
-      Array.from({ length: 32 }, () =>
-        Math.random().toString(36)[2] || "0"
-      ).join("");
+  // Fetch previous keys
+  useEffect(() => {
+    fetch("/api/keys")
+      .then((res) => res.json())
+      .then((data) => setKeys(data.keys));
+  }, []);
 
-    setApiKey(key);
+  // Create new project + API key
+  const createProject = async () => {
+    if (!appName.trim()) {
+      alert("Please enter an app name.");
+      return;
+    }
+
+    const generatedKey = "vx_" + crypto.randomUUID().replace(/-/g, "");
+    setApiKey(generatedKey);
     setVisible(true);
+
+    const res = await fetch("/api/keys/create", {
+      method: "POST",
+      body: JSON.stringify({
+        apiKey: generatedKey,
+        appName,
+      }),
+    });
+
+    const data = await res.json();
+    setKeys((prev) => [data.key, ...prev]);
+
+    setAppName(""); // clear input
   };
 
-  const regenerate = () => {
-    if (confirm("Regenerate key? The old key will immediately stop working.")) {
-      generateKey();
-    }
+  const revoke = async (id: string) => {
+    if (!confirm("Revoke this API key?")) return;
+
+    await fetch("/api/keys/revoke", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+    });
+
+    setKeys((prev) =>
+      prev.map((k) => (k.id === id ? { ...k, revoked: true } : k))
+    );
   };
 
-  const revoke = () => {
-    if (confirm("Revoke this API key? This cannot be undone.")) {
-      setApiKey(null);
-      setVisible(false);
-    }
-  };
+  const copyKey = (key: string, id?: string) => {
+    navigator.clipboard.writeText(key);
 
-  const copy = () => {
-    if (apiKey) {
-      navigator.clipboard.writeText(apiKey);
+    if (id) {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } else {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  // Code blocks (same style as Introduction)
-  const codeStyle = {
-    background: "transparent",
-    margin: 0,
-    padding: "0",
-    fontSize: "13.5px",
-    lineHeight: "1.7",
-    overflowX: "auto",
-  };
-
-  const codeTagProps = {
-    style: {
-      background: "transparent",
-      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-      whiteSpace: "pre",
-    },
-  };
+  // Code example style
+  const codeStyle = { background: "transparent", margin: 0, padding: 0 };
+  const codeTagProps = { style: { background: "transparent" } };
 
   const wsCode = `const ws = new WebSocket(
   "wss://velyx.io/ws?apiKey=${apiKey || "YOUR_API_KEY"}"
@@ -90,45 +112,96 @@ Content-Type: application/json
       {/* TITLE */}
       <div className="space-y-3">
         <h1 className="text-3xl font-semibold tracking-tight text-white">
-          Generate API Key
+          API Keys
         </h1>
-
-        <p className="text-neutral-400 text-lg leading-relaxed">
-          Create and manage your Velyx API keys.
+        <p className="text-neutral-400 text-lg">
+          Create projects and generate API keys.
         </p>
       </div>
 
       <div className="h-px bg-neutral-800" />
 
-      {/* WARNING CARD */}
-      <div className="bg-[#111111] border border-neutral-800 rounded-lg p-6">
-        <p className="text-neutral-300 text-sm leading-relaxed">
-          <span className="text-white font-medium">Important:</span>{" "}
-          Never expose or commit your API key publicly.
-          Always store it securely using environment variables.
-        </p>
+      {/* ---------------------------------------------- */}
+      {/* PAST KEYS */}
+      {/* ---------------------------------------------- */}
+      <div className="space-y-4">
+        <h2 className="text-white text-lg font-medium">Your Projects</h2>
+
+        {keys.length === 0 ? (
+          <p className="text-neutral-500 text-sm">
+            You haven't created any projects yet.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {keys.map((k) => (
+              <div
+                key={k.id}
+                className="bg-black border border-neutral-800 rounded-lg px-4 py-3 flex items-center justify-between"
+              >
+                <div className="flex flex-col">
+                  <span className="text-white font-medium">{k.appName}</span>
+                  <span className="font-mono text-sm text-neutral-300">{k.apiKey}</span>
+                  <span className="text-neutral-500 text-xs">
+                    Created: {new Date(k.createdAt).toLocaleString()}
+                  </span>
+                  {k.revoked && (
+                    <span className="text-red-400 text-xs mt-1">Revoked</span>
+                  )}
+                </div>
+
+                {!k.revoked && (
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => copyKey(k.apiKey, k.id)}
+                      className="text-neutral-400 hover:text-white transition"
+                    >
+                      {copiedId === k.id ? "Copied!" : <Copy size={16} />}
+                    </button>
+
+                    <button
+                      onClick={() => revoke(k.id)}
+                      className="text-red-300 hover:text-red-400 transition"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* KEY GENERATOR */}
-      {!apiKey ? (
-        <div className="space-y-4">
-          <button
-            onClick={generateKey}
-            className="px-6 py-3 bg-black border border-neutral-800 rounded-lg text-white hover:bg-neutral-900 transition"
-          >
-            Generate New API Key
-          </button>
+      <div className="h-px bg-neutral-800" />
 
-          <p className="text-neutral-400 text-sm">
-            Click to create your API key.
-          </p>
-        </div>
-      ) : (
+      {/* ---------------------------------------------- */}
+      {/* CREATE PROJECT + GENERATE KEY */}
+      {/* ---------------------------------------------- */}
+      <div className="space-y-4">
+        <label className="text-sm text-neutral-400">Project Name</label>
+
+        <input
+          value={appName}
+          onChange={(e) => setAppName(e.target.value)}
+          placeholder="My Chat App"
+          className="w-full px-4 py-3 bg-black border border-neutral-800 rounded-lg text-white"
+        />
+
+        <button
+          onClick={createProject}
+          className="px-6 py-3 bg-black border border-neutral-800 rounded-lg text-white hover:bg-neutral-900 transition"
+        >
+          Create Project & Generate API Key
+        </button>
+      </div>
+
+      {/* ---------------------------------------------- */}
+      {/* SHOW NEWLY GENERATED KEY */}
+      {/* ---------------------------------------------- */}
+      {apiKey && (
         <div className="space-y-6">
-
-          {/* KEY DISPLAY */}
           <div className="space-y-3">
-            <label className="text-sm text-neutral-400">Your API Key</label>
+            <label className="text-sm text-neutral-400">New API Key</label>
 
             <div className="flex items-center gap-3">
               <div className="flex-1 bg-black border border-neutral-800 rounded-lg px-4 py-3 font-mono text-sm text-white flex items-center justify-between">
@@ -142,9 +215,8 @@ Content-Type: application/json
                 </button>
               </div>
 
-              {/* COPY BUTTON */}
               <button
-                onClick={copy}
+                onClick={() => copyKey(apiKey)}
                 className="px-4 py-3 bg-black border border-neutral-800 rounded-lg hover:bg-neutral-900 flex items-center gap-2 transition"
               >
                 <Copy size={16} className="text-neutral-300" />
@@ -154,83 +226,45 @@ Content-Type: application/json
               </button>
             </div>
           </div>
-
-          {/* ACTION BUTTONS */}
-          <div className="flex gap-3">
-            <button
-              onClick={regenerate}
-              className="px-4 py-2 bg-black border border-neutral-800 text-white rounded-lg hover:bg-neutral-900 flex items-center gap-2 transition"
-            >
-              <RefreshCw size={16} /> Regenerate
-            </button>
-
-            <button
-              onClick={revoke}
-              className="px-4 py-2 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg hover:bg-red-500/20 flex items-center gap-2 transition"
-            >
-              <Trash2 size={16} /> Revoke
-            </button>
-          </div>
         </div>
       )}
 
-      {/* ---- USING THE KEY ---- */}
+      {/* ---------------------------------------------- */}
+      {/* USING KEY */}
+      {/* ---------------------------------------------- */}
       <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 space-y-6">
         <h2 className="text-white text-lg font-medium">Using Your API Key</h2>
 
-        {/* WebSocket */}
-        <div className="space-y-2">
-          <p className="text-neutral-400 text-sm">WebSocket Connection</p>
+        <SyntaxHighlighter
+          language="javascript"
+          style={oneDark}
+          customStyle={codeStyle}
+          codeTagProps={codeTagProps}
+        >
+          {wsCode}
+        </SyntaxHighlighter>
 
-          <div className="rounded-md overflow-hidden">
-            <SyntaxHighlighter
-              language="javascript"
-              style={oneDark}
-              wrapLines
-              wrapLongLines
-              customStyle={codeStyle}
-              codeTagProps={codeTagProps}
-            >
-              {wsCode}
-            </SyntaxHighlighter>
-          </div>
-        </div>
-
-        {/* HTTP Publish */}
-        <div className="space-y-2">
-          <p className="text-neutral-400 text-sm">HTTP Publish Request</p>
-
-          <div className="rounded-md overflow-hidden">
-            <SyntaxHighlighter
-              language="http"
-              style={oneDark}
-              wrapLines
-              wrapLongLines
-              customStyle={codeStyle}
-              codeTagProps={codeTagProps}
-            >
-              {httpCode}
-            </SyntaxHighlighter>
-          </div>
-        </div>
+        <SyntaxHighlighter
+          language="http"
+          style={oneDark}
+          customStyle={codeStyle}
+          codeTagProps={codeTagProps}
+        >
+          {httpCode}
+        </SyntaxHighlighter>
       </div>
 
-      {/* BEST PRACTICES CARD */}
+      {/* ---------------------------------------------- */}
+      {/* BEST PRACTICES */}
+      {/* ---------------------------------------------- */}
       <div className="bg-[#111111] border border-neutral-800 rounded-lg p-6 space-y-3">
         <h3 className="text-white text-lg font-medium">Best Practices</h3>
 
         <ul className="space-y-2 text-neutral-300">
-          {[
-            "Store API keys in environment variables.",
-            "Use different keys for development, staging, and production.",
-            "Rotate keys regularly.",
-            "Revoke compromised keys immediately.",
-          ].map((t, i) => (
-            <li key={i} className="flex gap-3 items-start">
-              <span className="text-neutral-500 mt-[3px]">•</span>
-              <span>{t}</span>
-            </li>
-          ))}
+          <li>Store API keys securely.</li>
+          <li>Use different keys for dev / prod.</li>
+          <li>Rotate keys regularly.</li>
+          <li>Revoke compromised keys immediately.</li>
         </ul>
       </div>
     </div>
