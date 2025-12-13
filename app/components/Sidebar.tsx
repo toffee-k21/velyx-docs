@@ -40,7 +40,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
       {/* Logo Block */}
       <div className="flex flex-col items-center mb-10">
         <Link href="/" className="flex justify-center items-center mb-3">
-          <Image src="/velyx-logo.png" alt="velyx" width={80} height={80} className="opacity-90" />
+          <Image src="/velyx.png" alt="velyx" width={80} height={80} className="opacity-90" />
         </Link>
 
         <p className="text-neutral-500 text-xs text-center tracking-wide">

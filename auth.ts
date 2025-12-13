@@ -15,7 +15,7 @@ const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, profile }: any) {
       // Call your backend velyx-auth to create or fetch user
-      const res = await fetch(`http://localhost:5001/user/create`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VELYXSERVER_URL}/user/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -52,7 +52,7 @@ const authOptions: AuthOptions = {
 
     async session({ session, token }: any) {
       session.user.id = token.userId;
-      session.backendToken = token.backendToken; // <-- IMPORTANT
+      session.backendToken = token.backendToken;
       return session;
     },
   },

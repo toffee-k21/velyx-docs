@@ -15,10 +15,10 @@ export default function Footer() {
           <div className="flex flex-col gap-3 max-w-sm">
             <div className="flex items-center gap-3">
               <Image
-                src="/velyx-logo.png"
+                src="/velyx.png"
                 alt="Velyx Logo"
-                width={36}
-                height={36}
+                width={32}
+                height={32}
               />
               <span className="text-lg font-semibold text-white">Velyx</span>
             </div>
