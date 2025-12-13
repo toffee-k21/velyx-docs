@@ -7,7 +7,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface KeyEntry {
-  id: string;
+  _id: string;
+  appId: string;
   apiKey: string;
   appName: string;
   createdAt: string;
@@ -22,7 +23,7 @@ export function GenerateAPIKey() {
   const [keys, setKeys] = useState<KeyEntry[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const { data: session } = useSession();
+  const { data: session }:any = useSession();
 
   if (!session) {
     return (
@@ -31,10 +32,17 @@ export function GenerateAPIKey() {
       </div>
     );
   }
-
+  
   // Fetch previous keys
   useEffect(() => {
-    fetch("/api/keys")
+    const token = session?.backendToken;
+    fetch("http://localhost:5001/key/get-keys",{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setKeys(data.keys));
   }, []);
@@ -45,21 +53,25 @@ export function GenerateAPIKey() {
       alert("Please enter an app name.");
       return;
     }
+  const token = session?.backendToken;
 
-    const generatedKey = "vx_" + crypto.randomUUID().replace(/-/g, "");
-    setApiKey(generatedKey);
     setVisible(true);
 
-    const res = await fetch("/api/keys/create", {
+    const res = await fetch("http://localhost:5001/key/create-app", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
       body: JSON.stringify({
-        apiKey: generatedKey,
         appName,
       }),
     });
 
     const data = await res.json();
-    setKeys((prev) => [data.key, ...prev]);
+    console.log(data);
+    setApiKey(data.apiKey);
+    setKeys((prev) => [data, ...prev]);
 
     setAppName(""); // clear input
   };
@@ -73,7 +85,7 @@ export function GenerateAPIKey() {
     });
 
     setKeys((prev) =>
-      prev.map((k) => (k.id === id ? { ...k, revoked: true } : k))
+      prev.map((k) => (k.appId === id ? { ...k, revoked: true } : k))
     );
   };
 
@@ -134,8 +146,7 @@ Content-Type: application/json
         ) : (
           <div className="space-y-3">
             {keys.map((k) => (
-              <div
-                key={k.id}
+              <div key={k._id ?? k.appId}
                 className="bg-black border border-neutral-800 rounded-lg px-4 py-3 flex items-center justify-between"
               >
                 <div className="flex flex-col">
@@ -152,14 +163,14 @@ Content-Type: application/json
                 {!k.revoked && (
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => copyKey(k.apiKey, k.id)}
+                      onClick={() => copyKey(k.apiKey, k.appId)}
                       className="text-neutral-400 hover:text-white transition"
                     >
-                      {copiedId === k.id ? "Copied!" : <Copy size={16} />}
+                      {copiedId === k.appId ? "Copied!" : <Copy size={16} />}
                     </button>
 
                     <button
-                      onClick={() => revoke(k.id)}
+                      onClick={() => revoke(k.appId)}
                       className="text-red-300 hover:text-red-400 transition"
                     >
                       <Trash2 size={16} />

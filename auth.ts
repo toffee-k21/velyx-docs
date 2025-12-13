@@ -1,7 +1,6 @@
-import { AuthOptions, getServerSession } from "next-auth"
+import { AuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { connectDB } from "@/lib/db";
-import User from "./models/User";
+import jwtLib from "jsonwebtoken";
 
 const authOptions: AuthOptions = {
   providers: [
@@ -13,39 +12,50 @@ const authOptions: AuthOptions = {
 
   secret: process.env.NEXTAUTH_SECRET,
 
- callbacks: {
-  async signIn({ profile } : any) {
-    const res = await fetch(`${process.env.VELYX_SERVERURL}/auth/oauth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        providerId: profile.sub,
-        email: profile.email,
-        name: profile.name,
-        image: profile.picture,
-      }),
-    });
+  callbacks: {
+    async signIn({ user, profile }: any) {
+      // Call your backend velyx-auth to create or fetch user
+      const res = await fetch(`http://localhost:5001/user/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          providerId: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    profile.internalUserId = data.userId;
+      // Store MongoDB user ID inside session
+      user.internalUserId = data.userId;
 
-    return true;
+      return true;
+    },
+
+    async jwt({ token, user }: any) {
+      // Only runs on login
+      if (user) {
+        token.userId = user.internalUserId;
+
+        // Create JWT for your backend
+        token.backendToken = jwtLib.sign(
+          { userId: user.internalUserId },
+          process.env.BACKEND_JWT_SECRET!,
+          { expiresIn: "7d" }
+        );
+      }
+
+      return token;
+    },
+
+    async session({ session, token }: any) {
+      session.user.id = token.userId;
+      session.backendToken = token.backendToken; // <-- IMPORTANT
+      return session;
+    },
   },
-  async jwt({ token, profile } : any) {
-
-  if (profile?.internalUserId) {
-    token.userId = profile.internalUserId;
-  }
-
-  return token;
-  },
-  async session({ session, token } : any) {
-    session.user.id = token.userId;
-    return session;
-  }
-}
-
 };
 
 const getSession = () => getServerSession(authOptions);
