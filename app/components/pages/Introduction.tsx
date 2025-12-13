@@ -114,7 +114,7 @@ x-api-key: YOUR_API_KEY
         <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
           <div className="text-neutral-500 text-sm">Frontend – Connect and subscribe</div>
 
-          <div className="rounded-md overflow-hidden">
+          <div className="rounded-lg overflow-hidden">
             <SyntaxHighlighter
               language="javascript"
               style={oneDark}
@@ -132,7 +132,7 @@ x-api-key: YOUR_API_KEY
         <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
           <div className="text-neutral-500 text-sm">Backend – Publish an event</div>
 
-          <div className="rounded-md overflow-hidden">
+          <div className="rounded-lg overflow-hidden">
             <SyntaxHighlighter
               language="http"
               style={oneDark}

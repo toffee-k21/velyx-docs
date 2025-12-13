@@ -64,7 +64,7 @@ Content-Type: application/json
             </p>
 
             <div className="bg-black border border-neutral-800 rounded-lg p-5">
-              <div className="rounded-md overflow-hidden">
+              <div className="rounded-lg overflow-hidden">
                 <SyntaxHighlighter
                   language="javascript"
                   style={oneDark}
@@ -92,7 +92,7 @@ Content-Type: application/json
             </p>
 
             <div className="bg-black border border-neutral-800 rounded-lg p-5">
-              <div className="rounded-md overflow-hidden">
+              <div className="rounded-lg overflow-hidden">
                 <SyntaxHighlighter
                   language="http"
                   style={oneDark}

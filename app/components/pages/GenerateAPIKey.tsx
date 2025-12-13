@@ -16,14 +16,33 @@ interface KeyEntry {
 }
 
 export function GenerateAPIKey() {
-  const [apiKey, setApiKey] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [appName, setAppName] = useState("");
+  const { data: session }: any = useSession();
+
   const [keys, setKeys] = useState<KeyEntry[]>([]);
+  const [appName, setAppName] = useState("");
+  const [apiKey, setApiKey] = useState<string | null>(null);
+
+  const [visible, setVisible] = useState(true);
+  const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const { data: session }:any = useSession();
+  /* ---------------- Shared Prism styles ---------------- */
+  const codeStyle = {
+    background: "transparent",
+    margin: 0,
+    padding: "0",
+    fontSize: "13.5px",
+    lineHeight: "1.7",
+    overflowX: "auto",
+  };
+
+  const codeTagProps = {
+    style: {
+      background: "transparent",
+      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+      whiteSpace: "pre",
+    },
+  };
 
   if (!session) {
     return (
@@ -32,63 +51,51 @@ export function GenerateAPIKey() {
       </div>
     );
   }
-  
-  // Fetch previous keys
+
+  /* ---------------- Fetch Keys ---------------- */
   useEffect(() => {
-    const token = session?.backendToken;
-    fetch("http://localhost:5001/key/get-keys",{
-      method: "GET",
+    if (!session?.backendToken) return;
+
+    fetch("http://localhost:5001/key/get-keys", {
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${session.backendToken}`,
       },
     })
       .then((res) => res.json())
       .then((data) => setKeys(data.keys));
-  }, []);
+  }, [session]);
 
-  // Create new project + API key
+  /* ---------------- Create Project ---------------- */
   const createProject = async () => {
-    if (!appName.trim()) {
-      alert("Please enter an app name.");
-      return;
-    }
-  const token = session?.backendToken;
-
-    setVisible(true);
+    if (!appName.trim()) return alert("Enter project name");
 
     const res = await fetch("http://localhost:5001/key/create-app", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${session.backendToken}`,
       },
-      body: JSON.stringify({
-        appName,
-      }),
+      body: JSON.stringify({ appName }),
     });
 
     const data = await res.json();
-    console.log(data);
+
     setApiKey(data.apiKey);
     setKeys((prev) => [data, ...prev]);
-
-    setAppName(""); // clear input
+    setAppName("");
+    setVisible(true);
   };
 
+  /* ---------------- Revoke ---------------- */
   const revoke = async (id: string) => {
     if (!confirm("Revoke this API key?")) return;
-
-    await fetch("/api/keys/revoke", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-    });
 
     setKeys((prev) =>
       prev.map((k) => (k.appId === id ? { ...k, revoked: true } : k))
     );
   };
 
+  /* ---------------- Copy ---------------- */
   const copyKey = (key: string, id?: string) => {
     navigator.clipboard.writeText(key);
 
@@ -101,10 +108,7 @@ export function GenerateAPIKey() {
     }
   };
 
-  // Code example style
-  const codeStyle = { background: "transparent", margin: 0, padding: 0 };
-  const codeTagProps = { style: { background: "transparent" } };
-
+  /* ---------------- Code Examples ---------------- */
   const wsCode = `const ws = new WebSocket(
   "wss://velyx.io/ws?apiKey=${apiKey || "YOUR_API_KEY"}"
 );`;
@@ -121,161 +125,156 @@ Content-Type: application/json
   return (
     <div className="space-y-12 max-w-3xl">
 
-      {/* TITLE */}
-      <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight text-white">
-          API Keys
-        </h1>
-        <p className="text-neutral-400 text-lg">
-          Create projects and generate API keys.
+      {/* ---------------- HEADER ---------------- */}
+      <div>
+        <h1 className="text-3xl font-semibold text-white">API Keys</h1>
+        <p className="text-neutral-400">
+          Create projects and manage API access.
         </p>
       </div>
 
-      <div className="h-px bg-neutral-800" />
+      {/* ---------------- NEW KEY ---------------- */}
+      {apiKey && (
+        <div className="rounded-xl border border-green-900/40 bg-green-950/30 p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-green-400 font-medium">New API key created</h3>
+            <span className="text-xs text-green-500">Shown only once</span>
+          </div>
 
-      {/* ---------------------------------------------- */}
-      {/* PAST KEYS */}
-      {/* ---------------------------------------------- */}
-      <div className="space-y-4">
-        <h2 className="text-white text-lg font-medium">Your Projects</h2>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 bg-black border border-neutral-800 rounded-lg px-4 py-3 font-mono text-sm text-white truncate">
+              {visible ? apiKey : "•".repeat(40)}
+            </div>
+
+            <button
+              onClick={() => setVisible(!visible)}
+              className="text-neutral-500 hover:text-white"
+            >
+              {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+
+            <button
+              onClick={() => copyKey(apiKey)}
+              className="px-4 py-2 bg-green-600/10 text-green-400 border border-green-700/40 rounded-lg hover:bg-green-600/20"
+            >
+              {copied ? "Copied" : "Copy"}
+            </button>
+          </div>
+
+          <p className="text-xs text-neutral-400">
+            Store this key securely. You won’t be able to view it again.
+          </p>
+        </div>
+      )}
+
+      {/* ---------------- CREATE PROJECT ---------------- */}
+      <div className="rounded-xl border border-neutral-800 bg-[#0B0B0B] p-5 space-y-4">
+        <h3 className="text-white font-medium">Create new project</h3>
+
+        <input
+          value={appName}
+          onChange={(e) => setAppName(e.target.value)}
+          placeholder="my-chat-app"
+          className="w-full rounded-lg border border-neutral-800 bg-black px-4 py-3 text-white"
+        />
+
+        <button
+          onClick={createProject}
+          className="rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-neutral-200 cursor-pointer"
+        >
+          Create project
+        </button>
+      </div>
+
+      {/* ---------------- PROJECT LIST ---------------- */}
+      <div className="space-y-3">
+        <h2 className="text-white font-medium">Your projects</h2>
 
         {keys.length === 0 ? (
-          <p className="text-neutral-500 text-sm">
-            You haven't created any projects yet.
-          </p>
+          <p className="text-neutral-500 text-sm">No projects yet.</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {keys.map((k) => (
-              <div key={k._id ?? k.appId}
-                className="bg-black border border-neutral-800 rounded-lg px-4 py-3 flex items-center justify-between"
+              <div
+                key={k._id}
+                className="flex items-center justify-between rounded-lg border border-neutral-800 bg-black px-4 py-3 hover:border-neutral-700"
               >
-                <div className="flex flex-col">
-                  <span className="text-white font-medium">{k.appName}</span>
-                  <span className="font-mono text-sm text-neutral-300">{k.apiKey}</span>
-                  <span className="text-neutral-500 text-xs">
-                    Created: {new Date(k.createdAt).toLocaleString()}
-                  </span>
+                <div>
+                  <p className="text-white font-medium">{k.appName}</p>
+                  <p className="text-xs text-neutral-500">
+                    Created {new Date(k.createdAt).toLocaleDateString()}
+                  </p>
                   {k.revoked && (
-                    <span className="text-red-400 text-xs mt-1">Revoked</span>
+                    <p className="text-xs text-red-400 mt-1">Revoked</p>
                   )}
                 </div>
 
-                {!k.revoked && (
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
+                  {!k.revoked && (
                     <button
                       onClick={() => copyKey(k.apiKey, k.appId)}
-                      className="text-neutral-400 hover:text-white transition"
+                      className="text-neutral-400 hover:text-white"
                     >
-                      {copiedId === k.appId ? "Copied!" : <Copy size={16} />}
+                      {copiedId === k.appId ? "Copied" : <Copy size={16} />}
                     </button>
+                  )}
 
-                    <button
-                      onClick={() => revoke(k.appId)}
-                      className="text-red-300 hover:text-red-400 transition"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                )}
+                  <button
+                    onClick={() => revoke(k.appId)}
+                    className="text-neutral-500 hover:text-red-400"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      <div className="h-px bg-neutral-800" />
+      {/* ---------------- USING API KEY (FIXED) ---------------- */}
+      <div className="rounded-xl border border-neutral-800 bg-[#0D0D0D] p-6 space-y-6">
+        <h2 className="text-white font-medium">Using your API key</h2>
 
-      {/* ---------------------------------------------- */}
-      {/* CREATE PROJECT + GENERATE KEY */}
-      {/* ---------------------------------------------- */}
-      <div className="space-y-4">
-        <label className="text-sm text-neutral-400">Project Name</label>
-
-        <input
-          value={appName}
-          onChange={(e) => setAppName(e.target.value)}
-          placeholder="My Chat App"
-          className="w-full px-4 py-3 bg-black border border-neutral-800 rounded-lg text-white"
-        />
-
-        <button
-          onClick={createProject}
-          className="px-6 py-3 bg-black border border-neutral-800 rounded-lg text-white hover:bg-neutral-900 transition"
-        >
-          Create Project & Generate API Key
-        </button>
-      </div>
-
-      {/* ---------------------------------------------- */}
-      {/* SHOW NEWLY GENERATED KEY */}
-      {/* ---------------------------------------------- */}
-      {apiKey && (
-        <div className="space-y-6">
-          <div className="space-y-3">
-            <label className="text-sm text-neutral-400">New API Key</label>
-
-            <div className="flex items-center gap-3">
-              <div className="flex-1 bg-black border border-neutral-800 rounded-lg px-4 py-3 font-mono text-sm text-white flex items-center justify-between">
-                {visible ? apiKey : "•".repeat(36)}
-
-                <button
-                  onClick={() => setVisible(!visible)}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  {visible ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-
-              <button
-                onClick={() => copyKey(apiKey)}
-                className="px-4 py-3 bg-black border border-neutral-800 rounded-lg hover:bg-neutral-900 flex items-center gap-2 transition"
-              >
-                <Copy size={16} className="text-neutral-300" />
-                <span className="text-neutral-300 text-sm">
-                  {copied ? "Copied!" : "Copy"}
-                </span>
-              </button>
-            </div>
+        <div className="bg-black border border-neutral-800 rounded-lg p-5">
+          <div className="rounded-lg overflow-hidden">
+            <SyntaxHighlighter
+              language="javascript"
+              style={oneDark}
+              wrapLines
+              wrapLongLines
+              customStyle={codeStyle}
+              codeTagProps={codeTagProps}
+            >
+              {wsCode}
+            </SyntaxHighlighter>
           </div>
         </div>
-      )}
 
-      {/* ---------------------------------------------- */}
-      {/* USING KEY */}
-      {/* ---------------------------------------------- */}
-      <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 space-y-6">
-        <h2 className="text-white text-lg font-medium">Using Your API Key</h2>
-
-        <SyntaxHighlighter
-          language="javascript"
-          style={oneDark}
-          customStyle={codeStyle}
-          codeTagProps={codeTagProps}
-        >
-          {wsCode}
-        </SyntaxHighlighter>
-
-        <SyntaxHighlighter
-          language="http"
-          style={oneDark}
-          customStyle={codeStyle}
-          codeTagProps={codeTagProps}
-        >
-          {httpCode}
-        </SyntaxHighlighter>
+        <div className="bg-black border border-neutral-800 rounded-lg p-5">
+          <div className="rounded-lg overflow-hidden">
+            <SyntaxHighlighter
+              language="http"
+              style={oneDark}
+              wrapLines
+              wrapLongLines
+              customStyle={codeStyle}
+              codeTagProps={codeTagProps}
+            >
+              {httpCode}
+            </SyntaxHighlighter>
+          </div>
+        </div>
       </div>
 
-      {/* ---------------------------------------------- */}
-      {/* BEST PRACTICES */}
-      {/* ---------------------------------------------- */}
-      <div className="bg-[#111111] border border-neutral-800 rounded-lg p-6 space-y-3">
-        <h3 className="text-white text-lg font-medium">Best Practices</h3>
-
-        <ul className="space-y-2 text-neutral-300">
-          <li>Store API keys securely.</li>
-          <li>Use different keys for dev / prod.</li>
-          <li>Rotate keys regularly.</li>
-          <li>Revoke compromised keys immediately.</li>
+      {/* ---------------- BEST PRACTICES ---------------- */}
+      <div className="rounded-xl border border-neutral-800 bg-[#111111] p-6 space-y-3">
+        <h3 className="text-white font-medium">Best practices</h3>
+        <ul className="text-neutral-300 text-sm space-y-1">
+          <li>• Never expose keys in frontend code</li>
+          <li>• Use separate keys for dev & prod</li>
+          <li>• Rotate keys periodically</li>
+          <li>• Revoke compromised keys immediately</li>
         </ul>
       </div>
     </div>

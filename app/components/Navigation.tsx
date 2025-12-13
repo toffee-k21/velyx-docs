@@ -27,7 +27,7 @@ export function Navigation() {
 
   return (
     <>
-      <nav className="w-full border-b border-neutral-900 bg-black sticky top-0 z-50 mb-10">
+      <nav className="w-full border-b border-neutral-900 bg-black sticky top-0 z-40 mb-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-6">
 
           {/* LEFT SECTION — now minimal, only logo space if needed */}
@@ -70,7 +70,7 @@ export function Navigation() {
 
                 <button
                   onClick={() => signIn()}
-                  className="px-4 py-1.5 rounded-md bg-white text-black text-sm font-medium hover:bg-neutral-200 transition"
+                  className="px-4 py-1.5 rounded-lg bg-white text-black text-sm font-medium hover:bg-neutral-200 transition"
                 >
                   Create Account
                 </button>
@@ -115,7 +115,7 @@ export function Navigation() {
       w-40 
       bg-neutral-900 
       border border-neutral-800 
-      rounded-md 
+      rounded-lg 
       shadow-lg 
       py-2 
       z-20

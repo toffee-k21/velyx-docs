@@ -44,7 +44,7 @@ export default function Pricing() {
 
           {/* Highlighted FREE Badge */}
           <div className="inline-block px-6 py-2 mb-6 rounded-full bg-green-600/20 border border-green-600 text-green-400 font-semibold text-lg shadow-sm shadow-green-900/40">
-            FREE (Beta)
+            FREE 
           </div>
 
           {/* Description */}

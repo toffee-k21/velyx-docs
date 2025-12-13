@@ -33,7 +33,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
         bg-[#000000] 
         border-r border-neutral-900
         overflow-y-auto 
-        px-6 py-8
+        px-6 py-8 z-50
       "
       style={{ scrollbarWidth: 'none' }}
     >
@@ -76,7 +76,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
               key={item.id}
               onClick={() => onPageChange(item.id!)}
               className={` cursor-pointer
-                w-full text-left rounded-md text-sm
+                w-full text-left rounded-lg text-sm
                 flex items-center relative
                 px-3 py-2
 
