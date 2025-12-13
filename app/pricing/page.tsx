@@ -1,66 +1,77 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { Navigation } from "../components/Navigation";
+import { Github } from "lucide-react";
 
 export default function Pricing() {
   return (
-    <div className="w-full min-h-screen bg-black text-white flex flex-col">
+    <div className="w-full h-screen bg-black text-white flex flex-col overflow-hidden">
 
-      {/* Top Bar */}
-      <div className="max-w-6xl mx-auto w-full px-6 py-6 flex items-center justify-between">
+      {/* Navigation */}
+      <Navigation />
 
-        {/* Back Button */}
+      {/* Back */}
+      <div className="max-w-6xl mx-auto w-full px-6 mt-4">
         <Link
           href="/"
-          className="text-gray-400 hover:text-white text-sm transition flex items-center gap-2"
+          className="text-neutral-400 hover:text-white text-sm transition"
         >
           ← Back
         </Link>
-
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <Image
-            src="/velyx-logo.png"
-            alt="velyx"
-            width={36}
-            height={36}
-          />
-          <span className="text-lg font-semibold">Velyx</span>
-        </div>
-
-        {/* Placeholder for spacing */}
-        <div className="w-12"></div>
       </div>
 
-      {/* Center Pricing Card */}
-      <div className="flex flex-1 items-center justify-center px-6">
-        <div className=" border border-neutral-800 rounded-2xl p-14 shadow-xl shadow-black/40 backdrop-blur-md text-center max-w-2xl w-full">
+      {/* Content */}
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="w-full max-w-xl text-center">
 
-          {/* Title */}
-          <h1 className="text-4xl font-semibold mb-5 tracking-tight">
+          {/* Page label (separate, subtle) */}
+          <p className="text-xs uppercase tracking-widest text-neutral-500 mb-6">
             Pricing
+          </p>
+
+          {/* Price */}
+          <h1 className="text-6xl font-semibold tracking-tight mb-6">
+            Free
           </h1>
 
-          {/* Highlighted FREE Badge */}
-          <div className="inline-block px-6 py-2 mb-6 rounded-full bg-green-600/20 border border-green-600 text-green-400 font-semibold text-lg shadow-sm shadow-green-900/40">
-            FREE 
+          {/* Message */}
+          <p className="text-neutral-300 leading-relaxed max-w-md mx-auto mb-4">
+            Velyx is currently in active development.
+            The focus is on building a solid real-time foundation
+            without plans, tiers, or restrictions.
+          </p>
+
+          <p className="text-neutral-400 text-sm max-w-md mx-auto mb-10">
+            If you’re using Velyx at this stage, you’re early — and your
+            feedback directly shapes the product.
+          </p>
+
+          {/* Minimal engagement field */}
+          <div className="flex flex-col items-center gap-3 mb-10">
+            <input
+              type="text"
+              placeholder="What are you building with Velyx?"
+              className="w-full max-w-sm bg-transparent border-b border-neutral-700 px-2 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-400 transition"
+            />
+            <p className="text-xs text-neutral-500">
+              Optional — helps guide development
+            </p>
           </div>
 
-          {/* Description */}
-          <p className="text-gray-300 text-lg leading-relaxed">
-            Velyx is completely free while in <span className="text-white font-medium">Beta</span>.
-            No paywalls, no limits — just pure real-time infrastructure.
-          </p>
-
-          <p className="text-gray-500 text-sm mt-8">
-            Start building without friction.  
-            Pricing will be announced after the Beta phase.
-          </p>
+          {/* Support link */}
+          <a
+            href="https://github.com/toffee-k21/velyx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-neutral-400 hover:text-white text-sm transition"
+          >
+            <Github size={16} />
+            <span>Follow development on GitHub</span>
+          </a>
 
         </div>
       </div>
-
     </div>
   );
 }
