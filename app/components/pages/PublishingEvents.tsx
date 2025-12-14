@@ -24,7 +24,7 @@ export function PublishingEvents() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <span className="px-2 py-1 bg-[#0066FF] text-white text-xs rounded">POST</span>
-                  <code className="text-white">https://velyx.io/publish</code>
+                  <code className="text-white">https://velyx.me/publish</code>
                 </div>
                 <p className="text-white/70 text-sm">
                   Send a POST request with your API key and event payload to publish to a topic.
@@ -37,7 +37,7 @@ export function PublishingEvents() {
             <h2 className="text-white">Request Format</h2>
             <div className="bg-black border border-white/10 rounded-lg p-5">
               <pre className="text-white/80 text-sm overflow-x-auto">
-                <code>{`POST https://velyx.io/publish
+                <code>{`POST https://velyx.me/publish
 x-api-key: YOUR_API_KEY
 Content-Type: application/json
 
@@ -112,7 +112,7 @@ Content-Type: application/json
                 <div className="bg-black border border-white/10 rounded-lg p-5">
                   <pre className="text-white/80 text-sm overflow-x-auto">
                     <code>{`async function publishEvent(topic, data) {
-  const response = await fetch('https://velyx.io/publish', {
+  const response = await fetch('https://velyx.me/publish', {
     method: 'POST',
     headers: {
       'x-api-key': process.env.VELYX_API_KEY,
@@ -145,7 +145,7 @@ import os
 
 def publish_event(topic, data):
     response = requests.post(
-        'https://velyx.io/publish',
+        'https://velyx.me/publish',
         headers={
             'x-api-key': os.environ['VELYX_API_KEY'],
             'Content-Type': 'application/json'
@@ -191,7 +191,7 @@ func publishEvent(topic string, data interface{}) error {
     })
     
     req, _ := http.NewRequest("POST", 
-        "https://velyx.io/publish",
+        "https://velyx.me/publish",
         bytes.NewBuffer(payload))
     
     req.Header.Set("x-api-key", os.Getenv("VELYX_API_KEY"))

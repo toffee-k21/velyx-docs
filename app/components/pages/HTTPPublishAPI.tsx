@@ -22,7 +22,7 @@ export function HTTPPublishAPI() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="px-2 py-1 bg-[#0066FF] text-white text-xs rounded">POST</span>
-                <code className="text-white">https://velyx.io/publish</code>
+                <code className="text-white">https://velyx.me/publish</code>
               </div>
               <p className="text-white/70 text-sm">
                 Publish an event to a topic. All clients subscribed to that topic will receive it instantly.
@@ -218,7 +218,7 @@ export function HTTPPublishAPI() {
               <div className="text-white/80 mb-2">cURL</div>
               <div className="bg-black border border-white/10 rounded-lg p-5">
                 <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`curl -X POST https://velyx.io/publish \\
+                  <code>{`curl -X POST https://velyx.me/publish \\
   -H "x-api-key: YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -237,7 +237,7 @@ export function HTTPPublishAPI() {
               <div className="text-white/80 mb-2">JavaScript (Node.js)</div>
               <div className="bg-black border border-white/10 rounded-lg p-5">
                 <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`const response = await fetch('https://velyx.io/publish', {
+                  <code>{`const response = await fetch('https://velyx.me/publish', {
   method: 'POST',
   headers: {
     'x-api-key': process.env.VELYX_API_KEY,
@@ -271,7 +271,7 @@ if (result.success) {
 import os
 
 response = requests.post(
-    'https://velyx.io/publish',
+    'https://velyx.me/publish',
     headers={
         'x-api-key': os.environ['VELYX_API_KEY'],
         'Content-Type': 'application/json'
@@ -302,7 +302,7 @@ else:
                   <code>{`require 'net/http'
 require 'json'
 
-uri = URI('https://velyx.io/publish')
+uri = URI('https://velyx.me/publish')
 request = Net::HTTP::Post.new(uri)
 request['x-api-key'] = ENV['VELYX_API_KEY']
 request['Content-Type'] = 'application/json'

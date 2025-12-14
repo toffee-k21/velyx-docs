@@ -25,10 +25,10 @@ export function Support() {
               Get in touch with our support team for technical assistance, billing questions, or general inquiries.
             </p>
             <a 
-              href="mailto:support@velyx.io"
+              href="mailto:support@velyx.me"
               className="inline-block text-[#0066FF] hover:text-[#0052CC] transition-colors duration-200"
             >
-              support@velyx.io
+              support@velyx.me
             </a>
             <div className="text-white/50 text-sm">
               Response time: Usually within 24 hours
@@ -129,7 +129,7 @@ export function Support() {
               </div>
               <div className="pt-4">
                 <a 
-                  href="mailto:enterprise@velyx.io"
+                  href="mailto:enterprise@velyx.me"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white rounded-lg transition-colors duration-200"
                 >
                   Contact Enterprise Sales
@@ -146,7 +146,7 @@ export function Support() {
               Check our status page for real-time system status, scheduled maintenance, and incident reports.
             </p>
             <a 
-              href="https://status.velyx.io"
+              href="https://status.velyx.me"
               className="inline-flex items-center gap-2 text-[#0066FF] hover:text-[#0052CC] transition-colors duration-200"
             >
               <div className="w-2 h-2 rounded-full bg-emerald-500" />

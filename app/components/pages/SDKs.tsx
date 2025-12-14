@@ -102,7 +102,7 @@ export function SDKs() {
 
         <div className="pt-4">
           <a 
-            href="mailto:sdk-early-access@velyx.io"
+            href="mailto:sdk-early-access@velyx.me"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white rounded-lg transition-colors duration-200"
           >
             Request Early Access

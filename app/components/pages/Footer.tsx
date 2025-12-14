@@ -57,7 +57,7 @@ export default function Footer() {
         {/* Bottom note */}
         <p className="text-center text-gray-600 text-sm">
           Velyx is independently built & maintained by{" "}
-          <span className="text-gray-300"><Link href="https://github.com/toffee-k21" >Taufiq Hassan (@toffee-k21)</Link></span>
+          <span className="text-gray-300 hover:text-green-700"><Link href="https://github.com/toffee-k21" >Taufiq Hassan (@toffee-k21)</Link></span>
         </p>
       </div>
     </footer>

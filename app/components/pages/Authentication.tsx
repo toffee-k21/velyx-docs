@@ -4,9 +4,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export function Authentication() {
-  const wsCode = `const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_API_KEY");`;
+  const wsCode = `const ws = new WebSocket("wss://velyx.me/ws?apiKey=YOUR_API_KEY");`;
 
-  const httpCode = `POST https://velyx.io/publish
+  const httpCode = `POST https://velyx.me/publish
 x-api-key: YOUR_API_KEY
 Content-Type: application/json
 

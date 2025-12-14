@@ -125,10 +125,10 @@ export function GenerateAPIKey() {
   /* ---------------- Code Examples ---------------- */
 
   const wsCode = `const ws = new WebSocket(
-  "wss://velyx.io/ws?apiKey=${apiKey || "YOUR_API_KEY"}"
+  "wss://velyx.me/ws?apiKey=${apiKey || "YOUR_API_KEY"}"
 );`;
 
-  const httpCode = `POST https://velyx.io/publish
+  const httpCode = `POST https://velyx.me/publish
 x-api-key: ${apiKey || "YOUR_API_KEY"}
 Content-Type: application/json
 

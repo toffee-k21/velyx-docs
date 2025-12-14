@@ -4,7 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export function Introduction() {
-  const frontendCode = `const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_KEY");
+  const frontendCode = `const ws = new WebSocket("wss://velyx.me/ws?apiKey=YOUR_KEY");
 ws.onopen = () => {
   ws.send(JSON.stringify({
     action: "subscribe",
@@ -12,7 +12,7 @@ ws.onopen = () => {
   }));
 };`;
 
-  const backendCode = `POST https://velyx.io/publish
+  const backendCode = `POST https://velyx.me/publish
 x-api-key: YOUR_API_KEY
 
 {

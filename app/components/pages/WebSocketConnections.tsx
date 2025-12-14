@@ -87,7 +87,7 @@ export function WebSocketConnections() {
 
   connect() {
     this.ws = new WebSocket(
-      \`wss://velyx.io/ws?apiKey=\${this.apiKey}\`
+      \`wss://velyx.me/ws?apiKey=\${this.apiKey}\`
     );
 
     this.ws.onopen = () => {
@@ -169,7 +169,7 @@ export function WebSocketConnections() {
               <pre className="text-white/80 text-sm overflow-x-auto">
                 <code>{`const [connectionState, setConnectionState] = useState('disconnected');
 
-const ws = new WebSocket('wss://velyx.io/ws?apiKey=YOUR_KEY');
+const ws = new WebSocket('wss://velyx.me/ws?apiKey=YOUR_KEY');
 
 ws.onopen = () => {
   setConnectionState('connected');

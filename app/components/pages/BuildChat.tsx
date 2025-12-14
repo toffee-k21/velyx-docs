@@ -22,7 +22,7 @@ export function BuildChat() {
   };
 
   /* --- CODE BLOCKS --- */
-  const connectCode = `const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_API_KEY");
+  const connectCode = `const ws = new WebSocket("wss://velyx.me/ws?apiKey=YOUR_API_KEY");
 
 ws.onopen = () => {
   console.log("Connected to Velyx");
@@ -57,7 +57,7 @@ ws.onclose = () => {
   }
 };`;
 
-  const publishCode = `POST https://velyx.io/publish
+  const publishCode = `POST https://velyx.me/publish
 x-api-key: YOUR_API_KEY
 Content-Type: application/json
 
@@ -77,7 +77,7 @@ app.post('/api/chat/send', async (req, res) => {
 
   const sanitizedMessage = sanitize(message);
 
-  await fetch('https://velyx.io/publish', {
+  await fetch('https://velyx.me/publish', {
     method: 'POST',
     headers: {
       'x-api-key': process.env.VELYX_API_KEY,
@@ -105,7 +105,7 @@ function ChatRoom({ roomId, userId }) {
 
   useEffect(() => {
     const socket = new WebSocket(
-      \`wss://velyx.io/ws?apiKey=\${process.env.VELYX_API_KEY}\`
+      \`wss://velyx.me/ws?apiKey=\${process.env.VELYX_API_KEY}\`
     );
 
     socket.onopen = () => {

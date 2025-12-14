@@ -1,328 +1,223 @@
+"use client";
+
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 export function WebSocketAPI() {
-  return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-white">WebSocket API</h1>
-        <p className="text-white/60 text-lg">
-          Complete reference for the Velyx WebSocket protocol.
-        </p>
-      </div>
-
-      <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <h2 className="text-white">Connection</h2>
-          <p className="text-white/70">
-            Establish a WebSocket connection to Velyx by including your API key in the connection URL.
-          </p>
-          <div className="bg-black border border-white/10 rounded-lg p-5">
-            <div className="space-y-2">
-              <div className="text-white/40 text-xs">Endpoint</div>
-              <code className="text-white">wss://velyx.io/ws?apiKey=YOUR_API_KEY</code>
-            </div>
-          </div>
-          <div className="bg-white/5 border border-white/10 rounded-lg p-5 space-y-3">
-            <div className="text-white text-sm">Query Parameters</div>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start">
-                <code className="text-[#0066FF] mr-3">apiKey</code>
-                <span className="text-white/70">Your Velyx API key (required)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-px bg-white/10" />
-
-        <div className="space-y-3">
-          <h2 className="text-white">Client → Server Messages</h2>
-          <p className="text-white/70">
-            All client-to-server messages must be valid JSON with an <code className="text-white bg-white/5 px-1 rounded">action</code> field.
-          </p>
-
-          <div className="space-y-6 mt-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-[#0066FF] text-white text-xs rounded">subscribe</span>
-                <h3 className="text-white">Subscribe to a Topic</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                Subscribe to receive events published to a specific topic.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "action": "subscribe",
-  "topic": "chat:room-42"
-}`}</code>
-                </pre>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                <div className="space-y-2 text-sm">
-                  <div className="text-white">Fields</div>
-                  <ul className="space-y-1 text-white/70">
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">action</code>
-                      <span>Must be "subscribe"</span>
-                    </li>
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">topic</code>
-                      <span>The topic name to subscribe to (string, max 256 chars)</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-[#0066FF] text-white text-xs rounded">unsubscribe</span>
-                <h3 className="text-white">Unsubscribe from a Topic</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                Stop receiving events from a previously subscribed topic.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "action": "unsubscribe",
-  "topic": "chat:room-42"
-}`}</code>
-                </pre>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                <div className="space-y-2 text-sm">
-                  <div className="text-white">Fields</div>
-                  <ul className="space-y-1 text-white/70">
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">action</code>
-                      <span>Must be "unsubscribe"</span>
-                    </li>
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">topic</code>
-                      <span>The topic name to unsubscribe from (string)</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-[#0066FF] text-white text-xs rounded">ping</span>
-                <h3 className="text-white">Ping (Optional)</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                Send a ping to verify connection is alive. Server will respond with a pong.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "action": "ping"
-}`}</code>
-                </pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-px bg-white/10" />
-
-        <div className="space-y-3">
-          <h2 className="text-white">Server → Client Messages</h2>
-          <p className="text-white/70">
-            Messages sent from Velyx to your client.
-          </p>
-
-          <div className="space-y-6 mt-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-emerald-600 text-white text-xs rounded">event</span>
-                <h3 className="text-white">Published Event</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                An event published to a topic you're subscribed to.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "type": "event",
-  "topic": "chat:room-42",
-  "data": {
-    "user": "alice",
-    "message": "Hello world!",
-    "timestamp": "2025-12-07T10:30:00Z"
-  }
-}`}</code>
-                </pre>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                <div className="space-y-2 text-sm">
-                  <div className="text-white">Fields</div>
-                  <ul className="space-y-1 text-white/70">
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">type</code>
-                      <span>Always "event" for published events</span>
-                    </li>
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">topic</code>
-                      <span>The topic this event was published to</span>
-                    </li>
-                    <li className="flex items-start">
-                      <code className="text-[#0066FF] mr-2">data</code>
-                      <span>The event payload (whatever was published)</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-emerald-600 text-white text-xs rounded">pong</span>
-                <h3 className="text-white">Pong Response</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                Response to a ping message.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "type": "pong"
-}`}</code>
-                </pre>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 bg-red-600 text-white text-xs rounded">error</span>
-                <h3 className="text-white">Error Message</h3>
-              </div>
-              <p className="text-white/60 text-sm">
-                Sent when an error occurs processing your request.
-              </p>
-              <div className="bg-black border border-white/10 rounded-lg p-5">
-                <pre className="text-white/80 text-sm overflow-x-auto">
-                  <code>{`{
-  "type": "error",
-  "message": "Invalid topic name",
-  "code": "INVALID_TOPIC"
-}`}</code>
-                </pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-px bg-white/10" />
-
-        <div className="space-y-3">
-          <h2 className="text-white">Error Codes</h2>
-          <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left p-4 text-white text-sm">Code</th>
-                  <th className="text-left p-4 text-white text-sm">Description</th>
-                </tr>
-              </thead>
-              <tbody className="text-white/70 text-sm">
-                <tr className="border-b border-white/5">
-                  <td className="p-4"><code className="text-[#0066FF]">INVALID_API_KEY</code></td>
-                  <td className="p-4">The provided API key is invalid or expired</td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="p-4"><code className="text-[#0066FF]">INVALID_ACTION</code></td>
-                  <td className="p-4">The action field is missing or unknown</td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="p-4"><code className="text-[#0066FF]">INVALID_TOPIC</code></td>
-                  <td className="p-4">Topic name is invalid or too long</td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="p-4"><code className="text-[#0066FF]">RATE_LIMIT</code></td>
-                  <td className="p-4">Too many requests, slow down</td>
-                </tr>
-                <tr>
-                  <td className="p-4"><code className="text-[#0066FF]">INTERNAL_ERROR</code></td>
-                  <td className="p-4">Server error, try again later</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <h2 className="text-white">Complete Example</h2>
-          <div className="bg-black border border-white/10 rounded-lg p-5">
-            <pre className="text-white/80 text-sm overflow-x-auto">
-              <code>{`const ws = new WebSocket("wss://velyx.io/ws?apiKey=YOUR_API_KEY");
+  const connectCode = `const ws = new WebSocket(
+  "wss://velyx.me/ws?apiKey=YOUR_API_KEY"
+);
 
 ws.onopen = () => {
-  console.log("Connected");
-  
-  // Subscribe to topics
   ws.send(JSON.stringify({
-    action: "subscribe",
-    topic: "notifications:user-123"
-  }));
-  
-  ws.send(JSON.stringify({
-    action: "subscribe",
+    type: "subscribe",
     topic: "chat:room-42"
   }));
 };
 
 ws.onmessage = (event) => {
-  const message = JSON.parse(event.data);
-  
-  if (message.type === "event") {
-    console.log(\`Event on \${message.topic}:\`, message.data);
-    // Handle the event based on topic
-  } else if (message.type === "error") {
-    console.error(\`Error: \${message.message}\`);
+  const msg = JSON.parse(event.data);
+  console.log(msg);
+};`;
+
+  const eventCode = `{
+  "topic": "chat:room-42",
+  "payload": {
+    "user": "alice",
+    "message": "Hello world!"
   }
-};
+}`;
 
-ws.onerror = (error) => {
-  console.error("WebSocket error:", error);
-};
+  const codeStyle = {
+    background: "transparent",
+    margin: 0,
+    padding: "0",
+    fontSize: "13.5px",
+    lineHeight: "1.7",
+    overflowX: "auto",
+  };
 
-ws.onclose = () => {
-  console.log("Disconnected");
-  // Implement reconnection logic
-};`}</code>
-            </pre>
-          </div>
+  const codeTagProps = {
+    style: {
+      background: "transparent",
+      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+      whiteSpace: "pre",
+    },
+  };
+
+  return (
+    <div className="space-y-12 max-w-3xl">
+
+      {/* ---- Title ---- */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-semibold text-white tracking-tight">
+            WebSocket API
+          </h1>
+          <span className="px-2 py-0.5 text-xs rounded-full 
+            bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            realtime
+          </span>
         </div>
 
-        <div className="bg-[#0066FF]/10 border border-[#0066FF]/30 rounded-lg p-6">
-          <h3 className="text-white mb-3">Best Practices</h3>
-          <ul className="space-y-2 text-white/70">
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Always validate JSON before sending messages</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Handle all message types (event, pong, error) in your onmessage handler</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Implement error handling and display errors to users when appropriate</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Use ping/pong to detect connection issues if needed</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-[#0066FF] mr-3">•</span>
-              <span>Close connections properly when users navigate away</span>
-            </li>
+        <p className="text-neutral-400 text-lg leading-relaxed">
+          Low-level WebSocket protocol used by Velyx for real-time delivery.
+        </p>
+      </div>
+
+      <div className="h-px bg-neutral-800" />
+
+      {/* ---- Overview ---- */}
+      <div className="space-y-6 text-neutral-300 leading-relaxed">
+        <p>
+          Velyx exposes a persistent WebSocket connection that allows clients to
+          subscribe to topics and receive events in real time.
+        </p>
+
+        <div className="bg-[#111111] border border-neutral-800 rounded-lg p-6 space-y-3">
+          <h2 className="text-white text-lg font-medium">
+            What this connection handles
+          </h2>
+          <ul className="space-y-2">
+            {[
+              "Connection lifecycle and heartbeats",
+              "Topic subscription and routing",
+              "Automatic app-level topic isolation",
+              "Fan-out via Redis for horizontal scaling",
+            ].map((t, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="text-neutral-500">•</span>
+                <span>{t}</span>
+              </li>
+            ))}
           </ul>
         </div>
+      </div>
+
+      {/* ---- Connection ---- */}
+      <div className="space-y-4">
+        <h2 className="text-white text-xl font-medium">Connection</h2>
+
+        <p className="text-neutral-300">
+          Connect using your API key as a query parameter.
+          Invalid or missing keys will close the connection.
+        </p>
+
+        <div className="bg-black border border-neutral-800 rounded-lg p-5">
+          <SyntaxHighlighter
+            language="text"
+            style={oneDark}
+            customStyle={codeStyle}
+            codeTagProps={codeTagProps}
+          >
+            wss://velyx.me/ws?apiKey=YOUR_API_KEY
+          </SyntaxHighlighter>
+        </div>
+      </div>
+
+      {/* ---- Topic Isolation ---- */}
+      <div className="space-y-4">
+        <h2 className="text-white text-xl font-medium">Topic Isolation</h2>
+
+        <p className="text-neutral-300">
+          Topics are automatically namespaced per application.
+          Clients never interact with internal topic names directly.
+        </p>
+
+        <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 space-y-2 text-sm">
+          <div className="text-neutral-400">
+            Client topic:
+            <code className="ml-2 text-white">chat:room-42</code>
+          </div>
+          <div className="text-neutral-400">
+            Internal topic:
+            <code className="ml-2 text-white">
+              app:&lt;appId&gt;:chat:room-42
+            </code>
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Client Messages ---- */}
+      <div className="space-y-6">
+        <h2 className="text-white text-xl font-medium">Client → Server</h2>
+
+        <p className="text-neutral-300">
+          All messages must be JSON and include a <code className="text-white">type</code>.
+        </p>
+
+        <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
+          <div className="text-neutral-500 text-sm">
+            Subscribe to a topic
+          </div>
+
+          <SyntaxHighlighter
+            language="json"
+            style={oneDark}
+            customStyle={codeStyle}
+            codeTagProps={codeTagProps}
+          >
+{`{
+  "type": "subscribe",
+  "topic": "chat:room-42"
+}`}
+          </SyntaxHighlighter>
+        </div>
+      </div>
+
+      {/* ---- Server Messages ---- */}
+      <div className="space-y-6">
+        <h2 className="text-white text-xl font-medium">Server → Client</h2>
+
+        <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
+          <div className="text-neutral-500 text-sm">
+            Published event
+          </div>
+
+          <SyntaxHighlighter
+            language="json"
+            style={oneDark}
+            customStyle={codeStyle}
+            codeTagProps={codeTagProps}
+          >
+            {eventCode}
+          </SyntaxHighlighter>
+        </div>
+      </div>
+
+      {/* ---- Heartbeats ---- */}
+      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-6">
+        <h3 className="text-white font-medium mb-2">
+          Connection Liveness
+        </h3>
+        <p className="text-neutral-300 text-sm">
+          Ping / pong is handled automatically at the WebSocket protocol level.
+          No client-side ping message is required.
+        </p>
+      </div>
+
+      {/* ---- Example ---- */}
+      <div className="space-y-4">
+        <h2 className="text-white text-xl font-medium">Complete Example</h2>
+
+        <div className="bg-black border border-neutral-800 rounded-lg p-5">
+          <SyntaxHighlighter
+            language="javascript"
+            style={oneDark}
+            customStyle={codeStyle}
+            codeTagProps={codeTagProps}
+          >
+            {connectCode}
+          </SyntaxHighlighter>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="pt-4 text-neutral-500 text-sm">
+        Next:{" "}
+        <span className="text-white hover:underline cursor-pointer">
+          Publishing Events →
+        </span>
       </div>
     </div>
   );
