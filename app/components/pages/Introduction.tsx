@@ -21,7 +21,7 @@ x-api-key: YOUR_API_KEY
 }`;
 
   /* Reusable shared style */
-  const codeStyle = {
+  const codeStyle:any = {
     background: "transparent",
     margin: 0,
     padding: "0",

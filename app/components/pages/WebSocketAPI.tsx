@@ -28,7 +28,7 @@ ws.onmessage = (event) => {
   }
 }`;
 
-  const codeStyle = {
+  const codeStyle:any = {
     background: "transparent",
     margin: 0,
     padding: "0",

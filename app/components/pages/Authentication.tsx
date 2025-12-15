@@ -16,7 +16,7 @@ Content-Type: application/json
 }`;
 
   // Shared style config
-  const codeStyle = {
+  const codeStyle:any = {
     background: "transparent",
     margin: 0,
     padding: "0",
