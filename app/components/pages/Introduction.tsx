@@ -44,7 +44,7 @@ x-api-key: YOUR_API_KEY
       {/* ---- Title ---- */}
       <div className="space-y-3">
         <h1 className="text-3xl font-semibold text-white tracking-tight">
-          Velyx — Infrastructure for Realtime Experiences
+          Velyx - Infrastructure for Building Real-Time Applications
         </h1>
 
         <p className="text-neutral-400 text-lg leading-relaxed">

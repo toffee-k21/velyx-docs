@@ -44,7 +44,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
         </Link>
 
         <p className="text-neutral-500 text-xs text-center tracking-wide">
-          Infrastructure for Realtime Experiences
+          Infrastructure for Building Real-Time Applications
         </p>
       </div>
 
