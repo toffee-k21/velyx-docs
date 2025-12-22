@@ -20,8 +20,8 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
     // { id: 'publishing-events', label: 'Publishing Events', parent: 'Core Concepts' },
     // { id: 'reconnection-guide', label: 'Socket Reconnection Handle', parent: 'Core Concepts' },
     { section: 'API Reference' },
-    { id: 'websocket-api', label: 'WebSocket API', parent: 'API Reference' },
     { id: 'http-publish-api', label: 'HTTP Publish API', parent: 'API Reference' },
+    { id: 'websocket-api', label: 'WebSocket API', parent: 'API Reference' },
     // { id: 'sdks', label: 'SDKs (Coming Soon)', section: null },
     { id: 'support', label: 'Support & Contact', section: null },
   ];

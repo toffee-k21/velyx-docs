@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "topic": "chat:room-42",
-  "data": {
+  "payload": {
     "user": "alice",
     "message": "Hello world!",
     "timestamp": "2025-12-07T10:30:00Z"
@@ -21,7 +21,6 @@ Content-Type: application/json
 
   const successResponse = `{
   "success": true,
-  "delivered": 42,
   "topic": "chat:room-42"
 }`;
 
@@ -30,7 +29,7 @@ Content-Type: application/json
   -H "Content-Type: application/json" \\
   -d '{
     "topic": "notifications:user-123",
-    "data": {
+    "payload": {
       "type": "order_update",
       "status": "shipped"
     }
@@ -44,7 +43,7 @@ Content-Type: application/json
   },
   body: JSON.stringify({
     topic: "chat:room-42",
-    data: {
+    payload: {
       user: "alice",
       message: "Hello!"
     }
@@ -125,7 +124,7 @@ Content-Type: application/json
 
         <ul className="text-neutral-300 text-sm space-y-1">
           <li>• <code className="text-white">topic</code> — logical topic name (max 256 chars)</li>
-          <li>• <code className="text-white">data</code> — any valid JSON payload (≤ 1 MB)</li>
+          <li>• <code className="text-white">payload</code> — any valid JSON payload (≤ 1 MB)</li>
         </ul>
       </Section>
 
@@ -135,10 +134,10 @@ Content-Type: application/json
           {successResponse}
         </CodeBlock>
 
-        <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 text-neutral-300 text-sm space-y-1">
+        {/* <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-6 text-neutral-300 text-sm space-y-1">
           <p>• <code className="text-white">delivered</code> = active subscribers</p>
           <p>• Delivery is best-effort (at-most-once)</p>
-        </div>
+        </div> */}
       </Section>
 
       {/* ---------- Examples ---------- */}
