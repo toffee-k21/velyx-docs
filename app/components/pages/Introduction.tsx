@@ -7,7 +7,7 @@ export function Introduction() {
   const frontendCode = `const ws = new WebSocket("wss://velyx.me/ws?apiKey=YOUR_KEY");
 ws.onopen = () => {
   ws.send(JSON.stringify({
-    action: "subscribe",
+    type: "subscribe",
     topic: "notifications:user-123"
   }));
 };`;
@@ -17,7 +17,7 @@ x-api-key: YOUR_API_KEY
 
 {
   "topic": "notifications:user-123",
-  "data": { "message": "Your order has shipped!" }
+  "payload": { "message": "Your order has shipped!" }
 }`;
 
   /* Reusable shared style */
