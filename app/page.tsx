@@ -5,7 +5,7 @@ import { Sidebar } from './components/Sidebar';
 import { Introduction } from './components/pages/Introduction';
 import { Authentication } from './components/pages/Authentication';
 import { GenerateAPIKey } from './components/pages/GenerateAPIKey';
-import { BuildChat } from './components/pages/BuildChat';
+import { BuildRealtimeChatGuide } from './components/pages/BuildRealtimeChatGuide';
 import { WebSocketConnections } from './components/pages/WebSocketConnections';
 import { TopicsSubscriptions } from './components/pages/TopicsSubscriptions';
 import { PublishingEvents } from './components/pages/PublishingEvents';
@@ -25,7 +25,7 @@ export default function App() {
       case 'introduction': return <Introduction />;
       case 'authentication': return <Authentication />;
       case 'generate-api-key': return <GenerateAPIKey />;
-      case 'build-chat': return <BuildChat />;
+      case 'build-chat': return <BuildRealtimeChatGuide />;
       case 'websocket-connections': return <WebSocketConnections />;
       case 'reconnection-guide': return <ReconnectionGuide />;
       case 'topics-subscriptions': return <TopicsSubscriptions />;
