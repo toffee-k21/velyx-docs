@@ -27,6 +27,19 @@ ws.onmessage = (event) => {
     "message": "Hello world!"
   }
 }`;
+const publishRequestCode = `{
+  "topic": "chat:room-42",
+  "payload": {
+    "user": "alice",
+    "message": "Hello world!"
+  }
+}`;
+
+const clientEventCode = `{
+  "user": "alice",
+  "message": "Hello world!"
+}`;
+
 
   const codeStyle:any = {
     background: "transparent",
@@ -165,28 +178,52 @@ ws.onmessage = (event) => {
         </div>
       </div>
 
-      {/* ---- Server Messages ---- */}
-      <div className="space-y-6">
-        <h2 className="text-white text-xl font-medium">Server → Client</h2>
+{/* ---- Server Messages ---- */}
+<div className="space-y-6">
+  <h2 className="text-white text-xl font-medium">Server → Client</h2>
 
-        <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
-          <div className="text-neutral-500 text-sm">
-            Published event
-          </div>
+  <p className="text-neutral-300">
+    Events are published to Velyx using the HTTP{" "}
+    <code className="text-white">/publish</code> API.  
+    Velyx routes the event internally and delivers only the{" "}
+    <code className="text-white">payload</code> to subscribed clients.
+  </p>
 
-          <SyntaxHighlighter
-            language="json"
-            style={oneDark}
-            customStyle={codeStyle}
-            codeTagProps={codeTagProps}
-          >
-            {eventCode}
-          </SyntaxHighlighter>
-        </div>
-      </div>
+  {/* Publish request to Velyx */}
+  <div className="bg-black border border-neutral-800 rounded-lg p-5 space-y-3">
+    <div className="text-neutral-500 text-sm">
+      HTTP <code className="text-white">/publish</code> request body
+    </div>
+
+    <SyntaxHighlighter
+      language="json"
+      style={oneDark}
+      customStyle={codeStyle}
+      codeTagProps={codeTagProps}
+    >
+      {publishRequestCode}
+    </SyntaxHighlighter>
+  </div>
+
+  {/* Client receives only payload */}
+  <div className="bg-[#0D0D0D] border border-neutral-800 rounded-lg p-5 space-y-3">
+    <div className="text-neutral-500 text-sm">
+      Message delivered to subscribed clients
+    </div>
+
+    <SyntaxHighlighter
+      language="json"
+      style={oneDark}
+      customStyle={codeStyle}
+      codeTagProps={codeTagProps}
+    >
+      {clientEventCode}
+    </SyntaxHighlighter>
+  </div>
+</div>
 
       {/* ---- Heartbeats ---- */}
-      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-6">
+      {/* <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-6">
         <h3 className="text-white font-medium mb-2">
           Connection Liveness
         </h3>
@@ -194,7 +231,7 @@ ws.onmessage = (event) => {
           Ping / pong is handled automatically at the WebSocket protocol level.
           No client-side ping message is required.
         </p>
-      </div>
+      </div> */}
 
       {/* ---- Example ---- */}
       <div className="space-y-4">
