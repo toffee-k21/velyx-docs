@@ -150,7 +150,7 @@ Content-Type: application/json
         {/* ---- Next Section ---- */}
         <div className="bg-[#111111] border border-neutral-800 rounded-lg p-5">
           <p className="text-neutral-300">
-            <span className="text-white font-medium">Next:</span> Visit the{" "}
+            {/* <span className="text-white font-medium">Next:</span> Visit the{" "} */}
             <span className="text-white underline underline-offset-2 cursor-pointer">
               Generate API Key
             </span>{" "}

@@ -251,10 +251,10 @@ const clientEventCode = `{
 
       {/* Footer */}
       <div className="pt-4 text-neutral-500 text-sm">
-        Next:{" "}
+        {/* Next:{" "}
         <span className="text-white hover:underline cursor-pointer">
           Publishing Events →
-        </span>
+        </span> */}
       </div>
     </div>
   );

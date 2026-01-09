@@ -208,12 +208,12 @@ export default function Room({ params }) {
       </div>
 
       {/* ---------- Footer ---------- */}
-      <div className="pt-4 text-neutral-500 text-sm">
+      {/* <div className="pt-4 text-neutral-500 text-sm">
         Next:{" "}
         <span className="text-white hover:underline cursor-pointer">
           Presence & State Sync
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }
