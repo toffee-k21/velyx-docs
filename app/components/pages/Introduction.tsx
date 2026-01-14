@@ -44,11 +44,11 @@ x-api-key: YOUR_API_KEY
       {/* ---- Title ---- */}
       <div className="space-y-3">
         <h1 className="text-3xl font-semibold text-white tracking-tight">
-          Velyx - Infrastructure for Building Real-Time Applications
+          <span className="text-emerald-500/90">Velyx</span> is a fully managed real-time delivery layer
         </h1>
 
         <p className="text-neutral-400 text-lg leading-relaxed">
-          The modern real-time delivery layer for high-performance applications.
+          It lets you build real-time applications without managing WebSocket infrastructure.
         </p>
       </div>
 

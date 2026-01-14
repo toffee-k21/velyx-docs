@@ -7,7 +7,11 @@ import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { GenerateAPIKeyModal } from "./pages/GenerateAPIKeyModal";
 
-export function Navigation() {
+interface NavigationProps {
+  onMenuClick?: () => void;
+}
+
+export function Navigation({ onMenuClick }: NavigationProps) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [keyModal, setKeyModal] = useState(false);
@@ -27,11 +31,23 @@ export function Navigation() {
 
   return (
     <>
+    
       <nav className="w-full border-b border-neutral-900 bg-black sticky top-0 z-40 mb-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-6">
 
-          {/* LEFT SECTION — now minimal, only logo space if needed */}
-          <div className="text-neutral-400 text-sm"></div>
+          {/* LEFT SECTION — Mobile menu */}
+        <div className="flex items-center gap-3">
+         {onMenuClick && (
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden text-neutral-400 hover:text-white transition"
+            aria-label="Open navigation"
+          >
+            ☰
+          </button>
+        )}
+        </div>
+
 
           {/* RIGHT SECTION — ALL NAV ELEMENTS TOGETHER */}
           <div className="flex items-center gap-6 text-sm">

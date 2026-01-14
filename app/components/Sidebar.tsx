@@ -1,109 +1,126 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 interface SidebarProps {
   activePage: string;
   onPageChange: (page: string) => void;
+  open: boolean;
+  onClose: () => void;
 }
 
-export function Sidebar({ activePage, onPageChange }: SidebarProps) {
+export function Sidebar({
+  activePage,
+  onPageChange,
+  open,
+  onClose,
+}: SidebarProps) {
   const navItems = [
-    { id: 'introduction', label: 'Introduction', section: null },
-    { section: 'Getting Started' },
-    { id: 'authentication', label: 'Authentication', parent: 'Getting Started' },
-    { id: 'generate-api-key', label: 'Generate API Key', parent: 'Getting Started' },
-    { section: 'Build Guides' },
-    { id: 'build-chat', label: 'Build a Realtime Chat App', parent: 'Build Guides' },
-    { section: 'Core Concepts' },
-    // { id: 'websocket-connections', label: 'WebSocket Connections', parent: 'Core Concepts' },
-    // { id: 'topics-subscriptions', label: 'Topics & Subscriptions', parent: 'Core Concepts' },
-    // { id: 'publishing-events', label: 'Publishing Events', parent: 'Core Concepts' },
-    { id: 'reconnection-guide', label: 'Socket Reconnection Handle', parent: 'Core Concepts' },
-    { section: 'API Reference' },
-    { id: 'http-publish-api', label: 'HTTP Publish API', parent: 'API Reference' },
-    { id: 'websocket-api', label: 'WebSocket API', parent: 'API Reference' },
-    // { id: 'sdks', label: 'SDKs (Coming Soon)', section: null },
-    { id: 'support', label: 'Support & Contact', section: null },
+    { id: "introduction", label: "Introduction" },
+    { section: "Getting Started" },
+    { id: "authentication", label: "Authentication", parent: true },
+    { id: "generate-api-key", label: "Generate API Key", parent: true },
+    { section: "Build Guides" },
+    { id: "build-chat", label: "Build a Realtime Chat App", parent: true },
+    { section: "Core Concepts" },
+    { id: "reconnection-guide", label: "Socket Reconnection Handle", parent: true },
+    { section: "API Reference" },
+    { id: "http-publish-api", label: "HTTP Publish API", parent: true },
+    { id: "websocket-api", label: "WebSocket API", parent: true },
+    { id: "support", label: "Support & Contact" },
   ];
 
   return (
-    <aside
-      className="
-        fixed top-0 left-0 h-screen w-72
-        bg-[#000000] 
-        border-r border-neutral-900
-        overflow-y-auto 
-        px-6 py-8 z-50
-      "
-      style={{ scrollbarWidth: 'none' }}
-    >
-      {/* Logo Block */}
-      <div className="flex flex-col items-center mb-10">
-        <Link href="/" className="flex justify-center items-center mb-3">
-          <Image src="/velyx.png" alt="velyx" width={55} height={55} className="opacity-90" />
-        </Link>
+    <>
+      {/* Overlay (mobile only) */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
-        <p className="text-neutral-500 text-xs text-center tracking-wide">
-          Infrastructure for Building Real-Time Applications
-        </p>
-      </div>
+      <aside
+        className={`
+          fixed top-0 left-0 h-screen
+          w-[85vw] max-w-80 lg:w-72
+          bg-black border-r border-neutral-900
+          px-6 py-8 z-50
+          overflow-y-auto
+          transform transition-transform duration-300 ease-out
 
-      {/* Nav */}
-      <nav className="space-y-1">
-        {navItems.map((item, index) => {
-          if ("section" in item && item.section) {
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
+        {/* Close button (mobile only) */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-neutral-400 hover:text-white lg:hidden"
+        >
+          ✕
+        </button>
+
+        {/* Logo */}
+        <div className="flex flex-col items-center mb-10">
+          <Link href="/" className="flex justify-center items-center mb-3">
+            <Image
+              src="/velyx.png"
+              alt="velyx"
+              width={52}
+              height={52}
+              className="opacity-90"
+            />
+          </Link>
+
+          <p className="text-neutral-500 text-xs text-center tracking-wide">
+            Real-time infrastructure
+          </p>
+        </div>
+
+        {/* Navigation */}
+        <nav className="space-y-1">
+          {navItems.map((item, index) => {
+            if ("section" in item) {
+              return (
+                <div
+                  key={index}
+                  className="pt-6 pb-2 text-neutral-500 text-[11px] uppercase tracking-wider font-medium"
+                >
+                  {item.section}
+                </div>
+              );
+            }
+
+            const isActive = activePage === item.id;
+
             return (
-              <div
-                key={index}
-                className="
-                  pt-6 pb-2 
-                  text-neutral-500 
-                  text-[11px] 
-                  uppercase 
-                  tracking-wider 
-                  font-medium
-                "
+              <button
+                key={item.id}
+                onClick={() => {
+                  onPageChange(item.id!);
+                  onClose(); // 👈 auto-close on mobile
+                }}
+                className={`
+                  w-full text-left rounded-lg text-sm
+                  flex items-center relative px-3 py-2
+                  ${item.parent ? "ml-2" : ""}
+                  ${
+                    isActive
+                      ? "text-white bg-neutral-900/60"
+                      : "text-neutral-400 hover:text-white hover:bg-neutral-900/40"
+                  }
+                `}
               >
-                {item.section}
-              </div>
+                {/* Active indicator */}
+                {isActive && (
+                  <span className="absolute left-0 top-0 h-full w-[3px] bg-white rounded-r-sm" />
+                )}
+                {item.label}
+              </button>
             );
-          }
-
-          const isActive = activePage === item.id;
-
-          return (
-            <button
-              key={item.id}
-              onClick={() => onPageChange(item.id!)}
-              className={` cursor-pointer
-                w-full text-left rounded-lg text-sm
-                flex items-center relative
-                px-3 py-2
-
-                ${item.parent ? "ml-2" : ""}
-
-                ${isActive
-                  ? "text-white bg-neutral-900/60"
-                  : "text-neutral-400 hover:text-white hover:bg-neutral-900/40"
-                }
-              `}
-            >
-              {/* Active Left Bar (Vercel style) */}
-              {isActive && (
-                <span
-                  className="
-                    absolute left-0 top-0 h-full w-[3px]
-                    bg-white
-                    rounded-r-sm
-                  "
-                />
-              )}
-
-              {item.label}
-            </button>
-          );
-        })}
-      </nav>
-    </aside>
+          })}
+        </nav>
+      </aside>
+    </>
   );
 }

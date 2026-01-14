@@ -44,7 +44,7 @@ ws.onopen = () => ws.send(JSON.stringify({
     <Navigation />
     <main className="relative w-full bg-black">
       {/* Subtle glow */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-emerald-500/10 blur-[140px]" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[140px]" />
 
       <div className="relative max-w-6xl mx-auto px-6 pt-10 pb-14">
         {/* HERO */}
@@ -59,9 +59,9 @@ ws.onopen = () => ws.send(JSON.stringify({
             </div>
 
             <h1 className="text-white text-5xl font-semibold tracking-tight leading-[1.1]">
-              Build real-time apps,
+              Build real-time apps
               <br />
-              <span className="text-neutral-300">without WebSocket ops.</span>
+              <span className="text-neutral-300">without managing WebSockets</span>
             </h1>
 
             <p className="text-neutral-400 text-lg leading-relaxed max-w-xl">

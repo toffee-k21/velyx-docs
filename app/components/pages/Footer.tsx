@@ -25,7 +25,6 @@ export default function Footer() {
 
             <p className="text-gray-500 text-sm leading-relaxed">
               A lightweight, scalable real-time engine for modern applications.
-              Designed with simplicity and performance at its core.
             </p>
           </div>
 
@@ -40,9 +39,16 @@ export default function Footer() {
             >
               GitHub
             </a>
+            <a
+              href="https://taufiq21.vercel.app"
+              target="_blank"
+              className="text-gray-400 hover:text-white text-sm transition"
+            >
+              Developer
+            </a>
 
             <a
-              href="https://x.com/tfq21"
+              href="https://x.com/tfq_21"
               target="_blank"
               className="text-gray-400 hover:text-white text-sm transition"
             >
@@ -55,10 +61,10 @@ export default function Footer() {
         <div className="border-t border-neutral-900 my-6"></div>
 
         {/* Bottom note */}
-        <p className="text-center text-gray-600 text-sm">
-          Velyx is independently built & maintained by{" "}
-          <span className="text-gray-300 hover:text-emerald-400"><Link href="https://github.com/toffee-k21" >Taufiq Hassan (@toffee-k21)</Link></span>
-        </p>
+       <p className="text-neutral-500 text-sm text-center">
+        Independently built and maintained by{" "}
+        <span className="text-neutral-300 font-medium">Taufiq Hassan</span>
+      </p>
       </div>
     </footer>
   );

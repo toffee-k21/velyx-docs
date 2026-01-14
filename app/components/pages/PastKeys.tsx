@@ -45,7 +45,7 @@ export function PastKeys() {
 
       <h3 className="text-white text-lg font-medium">Your API Keys</h3>
 
-      {keys.length === 0 ? (
+      {keys?.length === 0 ? (
         <p className="text-neutral-500 text-sm">
           No API keys found. Create one below.
         </p>

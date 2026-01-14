@@ -19,6 +19,8 @@ import { Navigation } from '../components/Navigation';
 
 export default function App() {
   const [activePage, setActivePage] = useState('introduction');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // const [activePage, setActivePage] = useState('introduction');
 
   const renderPage = () => {
     switch (activePage) {
@@ -38,28 +40,32 @@ export default function App() {
     }
   };
 
-  return (
-    <div className="flex min-h-screen bg-black text-white">
+return (
+  <div className="min-h-screen bg-black text-white">
+    <Sidebar
+      activePage={activePage}
+      onPageChange={(page) => {
+        setActivePage(page);
+        setSidebarOpen(false);
+      }}
+      open={sidebarOpen}
+      onClose={() => setSidebarOpen(false)}
+    />
 
-      {/* Sidebar (Client Component) */}
-      <Sidebar
-        activePage={activePage}
-        onPageChange={setActivePage}
-      />
+    {/* Main wrapper */}
+    <div className="flex flex-col lg:pl-72">
+      {/* Top Nav */}
+      <Navigation onMenuClick={() => setSidebarOpen(true)} />
 
-      {/* MAIN AREA */}
-      <main className="flex-1 ml-64">
-
-        {/* Navigation MUST be outside content wrapper */}
-        <Navigation />
-
-        {/* Content */}
-        <div className="max-w-4xl mx-auto px-12 py-16">
+      {/* Page Content */}
+      <main className="flex-1">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 sm:py-14 lg:py-16">
           {renderPage()}
           <Footer />
         </div>
-
       </main>
     </div>
-  );
+  </div>
+);
+
 }
