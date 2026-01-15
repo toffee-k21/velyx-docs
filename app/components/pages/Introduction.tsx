@@ -149,12 +149,12 @@ x-api-key: YOUR_API_KEY
       </div>
 
       {/* Footer */}
-      <div className="pt-4 text-neutral-500 text-sm">
+      {/* <div className="pt-4 text-neutral-500 text-sm">
         Continue to{" "}
         <span className="text-white underline-offset-2 hover:underline cursor-pointer">
           Getting Started → Authentication
         </span>.
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -174,12 +174,12 @@ Content-Type: application/json
       </div>
 
       {/* ---------- Footer ---------- */}
-      <div className="pt-4 text-neutral-500 text-sm">
+      {/* <div className="pt-4 text-neutral-500 text-sm">
         Previous:{" "}
         <span className="text-white hover:underline cursor-pointer">
           WebSocket API
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }
