@@ -43,9 +43,8 @@ ws.onopen = () => ws.send(JSON.stringify({
     <>
     <Navigation />
     <main className="relative w-full bg-black">
-      {/* Subtle glow */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[140px]" />
-
+    {/* Subtle glow */}
+    <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-full h-full rounded-full bg-emerald-500/10 blur-[140px]" />
       <div className="relative max-w-6xl mx-auto px-6 pt-10 pb-14">
         {/* HERO */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
