@@ -48,14 +48,8 @@ Below is a **high-level, conceptual overview** of how Velyx works.
 
 This diagram focuses on **data flow**, not internal implementation details.
 
-<p align="center">
-  <!-- Replace with actual diagram -->
-  <img
-    src="./assets/velyx-architecture.png"
-    alt="Velyx High-Level Architecture"
-    width="700"
-  />
-</p>
+<img width="2066" height="1454" alt="image" src="https://github.com/user-attachments/assets/ebb641cb-f60d-4cc7-917a-b30a5e1d87f2" />
+
 
 ### How Velyx Works (Conceptual)
 
