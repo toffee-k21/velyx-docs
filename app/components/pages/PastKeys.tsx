@@ -36,7 +36,7 @@ export function PastKeys() {
     });
 
     setKeys((prev) =>
-      prev.map((k) => (k.id === id ? { ...k, revoked: true } : k))
+      prev?.map((k) => (k.id === id ? { ...k, revoked: true } : k))
     );
   };
 
@@ -51,7 +51,7 @@ export function PastKeys() {
         </p>
       ) : (
         <div className="space-y-3">
-          {keys.map((k) => (
+          {keys?.map((k) => (
             <div
               key={k.id}
               className="bg-black border border-neutral-800 rounded-lg px-4 py-3 flex items-center justify-between"

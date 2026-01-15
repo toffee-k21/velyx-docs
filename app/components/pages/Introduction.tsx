@@ -103,7 +103,7 @@ x-api-key: YOUR_API_KEY
         </div>
 
         <p className="text-neutral-300 leading-relaxed">
-          No more managing WebSocket servers or scaling concerns. Velyx just works.
+          No more managing WebSocket servers or scaling concerns.<span className="text-emerald-500"> Velyx </span>just works.
         </p>
       </div>
 

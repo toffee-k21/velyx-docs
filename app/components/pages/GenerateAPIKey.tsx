@@ -211,13 +211,13 @@ Content-Type: application/json
       <div className="space-y-3">
         <h2 className="text-white font-medium">Your projects</h2>
 
-        {keys.length === 0 ? (
+        {keys?.length === 0 ? (
           <p className="text-neutral-500 text-sm">
             No projects yet.
           </p>
         ) : (
           <div className="space-y-2">
-            {keys.map((k) => (
+            {keys?.map((k) => (
               <div
                 key={k._id}
                 className="flex items-center justify-between rounded-lg border border-neutral-800 bg-black px-4 py-3 hover:border-neutral-700"
