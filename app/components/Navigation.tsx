@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { GenerateAPIKeyModal } from "./pages/GenerateAPIKeyModal";
+import { usePathname } from "next/navigation";
 
 interface NavigationProps {
   onMenuClick?: () => void;
@@ -16,6 +17,9 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   const [open, setOpen] = useState(false);
   const [keyModal, setKeyModal] = useState(false);
   const [greet, setGreet] = useState("");
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
 
   const greetings = [
     "welcome back",
@@ -46,6 +50,20 @@ export function Navigation({ onMenuClick }: NavigationProps) {
             ☰
           </button>
         )}
+        {isHome && (
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  src="/velyx.png"
+                  alt="Velyx"
+                  width={28}
+                  height={28}
+                  className="rounded-md"
+                />
+                <span className="text-white font-semibold tracking-tight hidden sm:block">
+                  Velyx
+                </span>
+              </Link>
+            )}
         </div>
 
 
