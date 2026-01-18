@@ -112,7 +112,7 @@ const clientEventCode = `{
         <h2 className="text-white text-xl font-medium">Connection</h2>
 
         <p className="text-neutral-300">
-          Connect using your API key as a query parameter.
+          Connect using your APP ID as a query parameter.
           Invalid or missing keys will close the connection.
         </p>
 
@@ -123,7 +123,7 @@ const clientEventCode = `{
             customStyle={codeStyle}
             codeTagProps={codeTagProps}
           >
-            wss://velyx.me/ws?apiKey=YOUR_API_KEY
+            wss://velyx.me/ws?appId=YOUR_APP_ID
           </SyntaxHighlighter>
         </div>
       </div>
