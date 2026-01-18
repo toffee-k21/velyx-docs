@@ -5,7 +5,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export function WebSocketAPI() {
   const connectCode = `const ws = new WebSocket(
-  "wss://velyx.me/ws?apiKey=YOUR_API_KEY"
+  "wss://velyx.me/ws?appId=YOUR_APP_ID"
 );
 
 ws.onopen = () => {

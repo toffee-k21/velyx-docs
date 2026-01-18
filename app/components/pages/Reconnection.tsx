@@ -98,7 +98,7 @@ export function ReconnectionGuide() {
 let subscribedTopics = new Set();
 
 function connect() {
-  socket = new WebSocket("wss://velyx.me/ws?apiKey=YOUR_KEY");
+  socket = new WebSocket("wss://velyx.me/ws?appId=YOUR_APP_ID");
 
   socket.onopen = () => {
     // Re-subscribe to all previous topics

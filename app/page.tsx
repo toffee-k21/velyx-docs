@@ -15,7 +15,7 @@ x-api-key: YOUR_KEY
 
 { "topic":"chat:42", "payload":{ "msg":"hello" } }`;
 
-  const wsExample = `const ws = new WebSocket("wss://velyx.me/ws?apiKey=KEY");
+  const wsExample = `const ws = new WebSocket("wss://velyx.me/ws?appId=KEY");
 
 ws.onopen = () => ws.send(JSON.stringify({
   type: "subscribe",

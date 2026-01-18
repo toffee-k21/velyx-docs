@@ -76,7 +76,7 @@ export default function Room({ params }) {
 
   useEffect(() => {
     const ws = new WebSocket(
-      \`wss://velyx.me/ws?apiKey=NEXT_PUBLIC_VELYX_API_KEY\`
+      \`wss://velyx.me/ws?appId=NEXT_PUBLIC_VELYX_APP_ID\`
     );
 
     ws.onopen = () => {
