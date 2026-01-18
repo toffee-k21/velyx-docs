@@ -72,7 +72,7 @@ x-api-key: YOUR_API_KEY
             {[
               "WebSocket connection management and lifecycle",
               "Topic-based routing and subscription mapping",
-              "Horizontal scaling and load distribution",
+              "Horizontal scaling and load distribution", 
               "Message fan-out to thousands of subscribers",
               "Built-in heartbeats and connection health monitoring",
             ].map((text, i) => (
