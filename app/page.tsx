@@ -11,11 +11,11 @@ export default function LandingPage() {
   const YOUTUBE_VIDEO_ID = "ParOnAPcAVY"; // <-- replace
 
   const publishExample = `POST /publish
-x-api-key: YOUR_KEY
+x-api-key: YOUR_API_KEY
 
 { "topic":"chat:42", "payload":{ "msg":"hello" } }`;
 
-  const wsExample = `const ws = new WebSocket("wss://velyx.me/ws?appId=KEY");
+  const wsExample = `const ws = new WebSocket("wss://velyx.me/ws?appId=YOUR_APP_ID");
 
 ws.onopen = () => ws.send(JSON.stringify({
   type: "subscribe",

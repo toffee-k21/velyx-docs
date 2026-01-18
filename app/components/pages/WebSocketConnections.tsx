@@ -75,7 +75,7 @@ export function WebSocketConnections() {
             </p>
             <div className="bg-black border border-white/10 rounded-lg p-5">
               <pre className="text-white/80 text-sm overflow-x-auto">
-                {/* <code>{`class VelyxClient {
+                <code>{`class VelyxClient {
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.reconnectAttempts = 0;
@@ -127,7 +127,7 @@ export function WebSocketConnections() {
       topic
     }));
   }
-}`}</code> */}
+}`}</code>
               </pre>
             </div>
           </div>
