@@ -142,7 +142,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Room({ params }: any) {
-  const { roomId } = params;
+  const { roomId }:any = React.use(params);
   const name = useSearchParams().get("name") ?? "guest";
 
   const [messages, setMessages] = useState<any[]>([]);
@@ -161,7 +161,9 @@ export default function Room({ params }: any) {
     wsRef.current = ws;
 
     ws.onopen = () => {
+      console.log("connected");
       setConnected(true);
+
       ws.send(
         JSON.stringify({
           type: "subscribe",
@@ -175,7 +177,10 @@ export default function Room({ params }: any) {
       setMessages((prev) => [...prev, data.payload ?? data]);
     };
 
-    ws.onclose = () => setConnected(false);
+    ws.onclose = () => {
+      console.log("disconnected");
+      setConnected(false);
+    };
 
     return () => ws.close();
   }, [roomId]);
@@ -198,7 +203,57 @@ export default function Room({ params }: any) {
     setInput("");
   };
 
-  return <div>Chat UI</div>;
+  return (
+    <main className="h-screen bg-black text-white flex flex-col">
+      {/* Header */}
+      <header className="border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium">Room</p>
+          <p className="text-xs text-neutral-400">{roomId}</p>
+        </div>
+        <span className="text-xs">
+          {connected ? "Connected" : "Disconnected"}
+        </span>
+      </header>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+        {messages.map((m, i) => (
+          <div key={i} className="text-sm">
+            <span className="text-neutral-400">{m.user}</span>
+            <span className="ml-2">{m.message}</span>
+          </div>
+        ))}
+
+        {messages.length === 0 && (
+          <p className="text-neutral-500 text-sm">
+            No messages yet. Start the conversation.
+          </p>
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="border-t border-neutral-800 p-3 flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder="Type a message..."
+          className="flex-1 bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm
+                     focus:outline-none focus:border-white"
+        />
+        <button
+          onClick={send}
+          disabled={!input.trim()}
+          className="px-4 py-2 rounded-md text-sm font-medium
+                     bg-white text-black
+                     disabled:opacity-30"
+        >
+          Send
+        </button>
+      </div>
+    </main>
+  );
 }
 `;
 
