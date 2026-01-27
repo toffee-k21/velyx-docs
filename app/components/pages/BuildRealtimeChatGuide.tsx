@@ -37,82 +37,97 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="w-full max-w-sm border border-neutral-800 rounded-xl p-6 space-y-6">
+  <main className="min-h-screen flex items-center justify-center bg-[#0e0e11] text-[#e5e5e7]">
+    <div className="w-full max-w-sm border border-[#1c1c21] rounded-[6px] p-7 space-y-7 bg-[#121216]">
 
-        {/* Header */}
-        <div className="text-center space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">
-            Instant Chat
-          </h1>
-          <p className="text-xs text-neutral-400">
-            Real-time rooms. No login.
-          </p>
-        </div>
-
-        {/* Name */}
-        <input
-          placeholder="Your name"
-          className="w-full bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm
-          focus:outline-none focus:ring-1 focus:ring-white/30"
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        {/* Toggle */}
-        <div className="flex border border-neutral-800 rounded-md overflow-hidden">
-          <button
-            onClick={() => setJoin(false)}
-            className={\`flex-1 py-2 text-sm \${
-              !join ? "bg-white text-black" : "text-neutral-400"
-            }\`}
-          >
-            Create
-          </button>
-          <button
-            onClick={() => setJoin(true)}
-            className={\`flex-1 py-2 text-sm \${
-              join ? "bg-white text-black" : "text-neutral-400"
-            }\`}
-          >
-            Join
-          </button>
-        </div>
-
-        {/* Action */}
-        {join ? (
-          <div className="space-y-3">
-            <input
-              placeholder="Room ID"
-              className="w-full bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm
-              focus:outline-none focus:ring-1 focus:ring-white/30"
-              onChange={(e) => setRoomId(e.target.value)}
-            />
-            <button
-              onClick={joinRoom}
-              disabled={!name || !roomId}
-              className="w-full bg-white text-black py-2 rounded-md text-sm
-              disabled:opacity-30"
-            >
-              Join Room
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={createRoom}
-            disabled={!name}
-            className="w-full bg-white text-black py-2 rounded-md text-sm
-            disabled:opacity-30"
-          >
-            Create Room
-          </button>
-        )}
-
-        {/* Footer */}
-        <p className="text-[11px] text-center text-neutral-500">
-          Powered by Velyx
+      {/* Header */}
+      <div className="text-center space-y-1.5">
+        <h1 className="text-lg font-medium tracking-tight text-white">
+          Instant Chat
+        </h1>
+        <p className="text-xs text-[#8b8b91]">
+          Real-time rooms. No login.
         </p>
       </div>
-    </main>
+
+      {/* Name */}
+      <input
+        placeholder="Your name"
+        className="w-full bg-[#0e0e11] border border-[#2a2a30] rounded-[4px]
+                  px-3.5 py-2.5 text-sm placeholder-[#6f6f75]
+                  focus:outline-none focus:border-[#c9a86a]
+                  transition"
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      {/* Toggle */}
+      <div className="flex bg-[#0e0e11] border border-[#2a2a30] rounded-[4px] overflow-hidden">
+        <button
+          onClick={() => setJoin(false)}
+          className={\`flex-1 py-2.5 text-sm transition \${
+            !join
+              ? "bg-[#1c1c21] text-white"
+              : "text-[#8b8b91] hover:text-white"
+          }\`}
+        >
+          Create
+        </button>
+        <button
+          onClick={() => setJoin(true)}
+          className={\`flex-1 py-2.5 text-sm transition \${
+            join
+              ? "bg-[#1c1c21] text-white"
+              : "text-[#8b8b91] hover:text-white"
+          }\`}
+        >
+          Join
+        </button>
+      </div>
+
+      {/* Action */}
+      {join ? (
+        <div className="space-y-4">
+          <input
+            placeholder="Room ID"
+            className="w-full bg-[#0e0e11] border border-[#2a2a30] rounded-[4px]
+                      px-3.5 py-2.5 text-sm placeholder-[#6f6f75]
+                      focus:outline-none focus:border-[#c9a86a]
+                      transition"
+            onChange={(e) => setRoomId(e.target.value)}
+          />
+
+          <button
+            onClick={joinRoom}
+            disabled={!name || !roomId}
+            className="w-full py-2.5 text-sm font-medium
+                      bg-[#1c1c21] text-white border border-[#2a2a30] rounded-[4px]
+                      hover:border-[#c9a86a]
+                      disabled:opacity-30 disabled:cursor-not-allowed
+                      transition"
+          >
+            Join Room
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={createRoom}
+          disabled={!name}
+          className="w-full py-2.5 text-sm font-medium
+                    bg-[#1c1c21] text-white border border-[#2a2a30] rounded-[4px]
+                    hover:border-[#c9a86a]
+                    disabled:opacity-30 disabled:cursor-not-allowed
+                    transition"
+        >
+          Create Room
+        </button>
+      )}
+
+      {/* Footer */}
+      <p className="text-[11px] text-center text-[#6f6f75]">
+        Powered by Velyx
+      </p>
+    </div>
+  </main>
   );
 }
 `;
@@ -150,6 +165,13 @@ export default function Room({ params }: any) {
   const [connected, setConnected] = useState(false);
 
   const wsRef = useRef<WebSocket | null>(null);
+
+  const [copied, setCopied] = useState(false);
+  const copyToClipboard = async (code:string) => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   useEffect(() => {
     if (!roomId) return;
@@ -204,55 +226,89 @@ export default function Room({ params }: any) {
   };
 
   return (
-    <main className="h-screen bg-black text-white flex flex-col">
-      {/* Header */}
-      <header className="border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium">Room</p>
-          <p className="text-xs text-neutral-400">{roomId}</p>
-        </div>
-        <span className="text-xs">
-          {connected ? "Connected" : "Disconnected"}
-        </span>
-      </header>
+<main className="h-screen flex flex-col bg-[#0e0e11] text-[#e5e5e7]">
+  {/* Header */}
+  <header className="flex items-center justify-between px-6 py-4 border-b border-[#1c1c21] bg-[#121216]">
+    <div className="flex flex-col gap-1">
+      <span className="text-sm font-medium tracking-tight text-white">
+        Chat Room
+      </span>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
-        {messages.map((m, i) => (
-          <div key={i} className="text-sm">
-            <span className="text-neutral-400">{m.user}</span>
-            <span className="ml-2">{m.message}</span>
-          </div>
-        ))}
+      <div className="flex items-center gap-2 text-xs text-[#9a9aa0]">
+        <span className="font-mono opacity-80">{roomId}</span>
 
-        {messages.length === 0 && (
-          <p className="text-neutral-500 text-sm">
-            No messages yet. Start the conversation.
-          </p>
-        )}
-      </div>
-
-      {/* Input */}
-      <div className="border-t border-neutral-800 p-3 flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && send()}
-          placeholder="Type a message..."
-          className="flex-1 bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm
-                     focus:outline-none focus:border-white"
-        />
         <button
-          onClick={send}
-          disabled={!input.trim()}
-          className="px-4 py-2 rounded-md text-sm font-medium
-                     bg-white text-black
-                     disabled:opacity-30"
+          onClick={() => copyToClipboard(roomId)}
+          className="px-2 py-[2px] rounded border border-[#2a2a30]
+                     bg-[#16161b] hover:bg-[#1e1e24] transition"
         >
-          Send
+          {copied ? "Copied" : "Copy"}
         </button>
       </div>
-    </main>
+    </div>
+
+    <div className="flex items-center gap-2 text-xs text-[#9a9aa0]">
+      <span
+        className={\`h-1.5 w-1.5 rounded-full \${
+          connected ? "bg-[#c9a86a]" : "bg-[#555]"
+        }\`}
+      />
+      {connected ? "Online" : "Offline"}
+    </div>
+  </header>
+
+  {/* Messages */}
+  <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+    {messages.map((m, i) => (
+      <div key={i} className="flex flex-col gap-1">
+        <span className="text-xs text-[#8b8b91]">
+          {m.user}
+        </span>
+        <span className="text-sm leading-relaxed text-[#e5e5e7]">
+          {m.message}
+        </span>
+      </div>
+    ))}
+
+    {messages.length === 0 && (
+      <p className="text-sm text-[#7a7a80]">
+        No messages yet. Say something meaningful.
+      </p>
+    )}
+  </div>
+
+  {/* Input */}
+  <div className="border-t border-[#1c1c21] bg-[#121216] px-5 py-4">
+    <div className="flex items-center gap-3">
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && send()}
+        placeholder="Write a message…"
+        className="flex-1 bg-[#0e0e11] border border-[#2a2a30]
+                   rounded-lg px-4 py-2.5 text-sm
+                   placeholder-[#6f6f75]
+                   focus:outline-none focus:border-[#c9a86a]
+                   transition"
+      />
+
+      <button
+        onClick={send}
+        disabled={!input.trim()}
+        className="px-5 py-2.5 rounded-lg text-sm font-medium
+                   bg-[#1e1e24] text-[#e5e5e7]
+                   border border-[#2a2a30]
+                   hover:bg-[#26262d]
+                   disabled:opacity-40 disabled:cursor-not-allowed
+                   transition"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</main>
+
+
   );
 }
 `;
