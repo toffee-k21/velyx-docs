@@ -1,12 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // Build Realtime Chat Guide
 
 export function BuildRealtimeChatGuide() {
-  const landingPageCode = String.raw`
+  const [copied, setCopied] = useState(false);
+  const copyToClipboard = async (code:string) => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  const landingPageCode = `
 "use client";
 
 import { useState } from "react";
@@ -128,7 +135,7 @@ export async function POST(req: Request) {
 }
 `;
 
-const roomPageCode = String.raw`
+const roomPageCode = `
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -228,11 +235,19 @@ export default function Room({ params }: any) {
           Collects a user name and room ID, then routes the user to{" "}
           <code className="text-white">/room/[roomId]</code>.
         </p>
-        <p>dir : /app/page.tsx</p>
-
+        <p className="text-neutral-500 font-bold text-sm"> /app/page.tsx</p>
+        <div className="relative">
+          <button
+        onClick={() => copyToClipboard(landingPageCode)}
+        className="absolute top-2 right-2 text-xs bg-neutral-700 text-white px-2 py-1 rounded"
+      >
+        {copied ? "Copied!" : "Copy"}
+      </button>
         <CodeBlock language="tsx">
           {landingPageCode}
         </CodeBlock>
+
+        </div>
       </Section>
 
       {/* ---------- API Route ---------- */}
@@ -241,11 +256,19 @@ export default function Room({ params }: any) {
           Publishing messages via a backend API route keeps your Velyx API key
           secure and allows future extensions.
         </p>
-        <p>dir : /app/api/publish/routes.ts</p>
+        <p className="text-neutral-500 font-bold text-sm"> /app/api/publish/route.ts</p>
+        <div className="relative">
+          <button
+          onClick={() => copyToClipboard(apiRouteCode)}
+          className="absolute top-2 right-2 text-xs bg-neutral-700 text-white px-2 py-1 rounded"
+        >
+          {copied ? "Copied!" : "Copy"}
+        </button>
 
-        <CodeBlock language="ts">
-          {apiRouteCode}
-        </CodeBlock>
+          <CodeBlock language="ts">
+            {apiRouteCode}
+          </CodeBlock>
+        </div>
       </Section>
 
       {/* ---------- Room Page ---------- */}
@@ -254,11 +277,18 @@ export default function Room({ params }: any) {
           Subscribes to a chat topic over WebSocket and renders messages
           in real time.
         </p>
-        <p>dir : /app/room/[roomId]/page.tsx</p>
-
-        <CodeBlock language="tsx">
-          {roomPageCode}
-        </CodeBlock>
+        <p className="text-neutral-500 font-bold text-sm">/app/room/[roomId]/page.tsx</p>
+        <div className="relative">
+          <button
+          onClick={() => copyToClipboard(roomPageCode)}
+          className="absolute top-2 right-2 text-xs bg-neutral-700 text-white px-2 py-1 rounded"
+          >
+            {copied ? "Copied!" : "Copy"}
+          </button>
+          <CodeBlock language="tsx">
+            {roomPageCode}
+          </CodeBlock>
+        </div>
       </Section>
 
       {/* ---------- Message Flow ---------- */}
@@ -294,9 +324,7 @@ export default function Room({ params }: any) {
   );
 }
 
-/* =========================================================
-   Shared UI
-   ========================================================= */
+  //  Shared UI
 
 function Section({
   title,
