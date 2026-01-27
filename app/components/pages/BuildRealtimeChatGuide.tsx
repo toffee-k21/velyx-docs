@@ -125,7 +125,7 @@ export async function POST(req: Request) {
   await fetch("https://velyx.me/publish", {
     method: "POST",
     headers: {
-      "x-api-key": process.env.NEXT_PUBLIC_VELYX_API_KEY!,
+      "x-api-key": process.env.VELYX_API_KEY!,
       "Content-Type": "application/json"
     },
     body: JSON.stringify(body)
