@@ -62,38 +62,54 @@ export async function POST(req: Request) {
 }
 `;
 
-  const roomPageCode = `"use client";
+const roomPageCode = String.raw`
+"use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function Room({ params }) {
+export default function Room({ params }: any) {
   const { roomId } = params;
   const name = useSearchParams().get("name") ?? "guest";
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
+  const [connected, setConnected] = useState(false);
+
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    if (!roomId) return;
+
     const ws = new WebSocket(
-      \`wss://velyx.me/ws?appId=NEXT_PUBLIC_VELYX_APP_ID\`
+      \`wss://velyx.me/ws?appId=\${process.env.NEXT_PUBLIC_VELYX_APP_ID}\`
     );
 
+    wsRef.current = ws;
+
     ws.onopen = () => {
-      ws.send(JSON.stringify({
-        type: "subscribe",
-        topic: \`chat:\${roomId}\`
-      }));
+      setConnected(true);
+      ws.send(
+        JSON.stringify({
+          type: "subscribe",
+          topic: \`chat:\${roomId}\`,
+        })
+      );
     };
 
     ws.onmessage = (e) => {
-      setMessages((prev) => [...prev, JSON.parse(e.data)]);
+      const data = JSON.parse(e.data);
+      setMessages((prev) => [...prev, data.payload ?? data]);
     };
+
+    ws.onclose = () => setConnected(false);
 
     return () => ws.close();
   }, [roomId]);
 
   const send = async () => {
+    if (!input.trim()) return;
+
     await fetch("/api/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -101,27 +117,18 @@ export default function Room({ params }) {
         topic: \`chat:\${roomId}\`,
         payload: {
           user: name,
-          message: input
-        }
-      })
+          message: input,
+        },
+      }),
     });
 
     setInput("");
   };
 
-  return (
-    <main>
-      {messages.map((m, i) => (
-        <div key={i}>
-          <b>{m.user}</b>: {m.message}
-        </div>
-      ))}
-      <input onChange={(e) => setInput(e.target.value)} />
-      <button onClick={send}>Send</button>
-    </main>
-  );
+  return <div>Chat UI</div>;
 }
 `;
+
 
   return (
     <div className="space-y-14 max-w-3xl">
@@ -155,6 +162,7 @@ export default function Room({ params }) {
           Collects a user name and room ID, then routes the user to{" "}
           <code className="text-white">/room/[roomId]</code>.
         </p>
+        <p>dir : /app/page.tsx</p>
 
         <CodeBlock language="tsx">
           {landingPageCode}
@@ -167,6 +175,7 @@ export default function Room({ params }) {
           Publishing messages via a backend API route keeps your Velyx API key
           secure and allows future extensions.
         </p>
+        <p>dir : /app/api/publish/routes.ts</p>
 
         <CodeBlock language="ts">
           {apiRouteCode}
@@ -179,6 +188,7 @@ export default function Room({ params }) {
           Subscribes to a chat topic over WebSocket and renders messages
           in real time.
         </p>
+        <p>dir : /app/room/[roomId]/page.tsx</p>
 
         <CodeBlock language="tsx">
           {roomPageCode}
