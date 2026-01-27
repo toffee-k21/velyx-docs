@@ -3,12 +3,11 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-/* =========================================================
-   Build Realtime Chat Guide
-   ========================================================= */
+// Build Realtime Chat Guide
 
 export function BuildRealtimeChatGuide() {
-  const landingPageCode = `"use client";
+  const landingPageCode = String.raw`
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -16,29 +15,96 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [name, setName] = useState("");
   const [roomId, setRoomId] = useState("");
+  const [join, setJoin] = useState(false);
   const router = useRouter();
 
   const createRoom = () => {
+    if (!name.trim()) return;
     const id = crypto.randomUUID().slice(0, 8);
     router.push(\`/room/\${id}?name=\${encodeURIComponent(name)}\`);
   };
 
   const joinRoom = () => {
+    if (!name.trim() || !roomId.trim()) return;
     router.push(\`/room/\${roomId}?name=\${encodeURIComponent(name)}\`);
   };
 
   return (
-    <main>
-      <input
-        placeholder="Your name"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        placeholder="Room ID"
-        onChange={(e) => setRoomId(e.target.value)}
-      />
-      <button onClick={createRoom}>Create Room</button>
-      <button onClick={joinRoom}>Join Room</button>
+    <main className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="w-full max-w-sm border border-neutral-800 rounded-xl p-6 space-y-6">
+
+        {/* Header */}
+        <div className="text-center space-y-1">
+          <h1 className="text-xl font-semibold tracking-tight">
+            Instant Chat
+          </h1>
+          <p className="text-xs text-neutral-400">
+            Real-time rooms. No login.
+          </p>
+        </div>
+
+        {/* Name */}
+        <input
+          placeholder="Your name"
+          className="w-full bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm
+          focus:outline-none focus:ring-1 focus:ring-white/30"
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        {/* Toggle */}
+        <div className="flex border border-neutral-800 rounded-md overflow-hidden">
+          <button
+            onClick={() => setJoin(false)}
+            className={\`flex-1 py-2 text-sm \${
+              !join ? "bg-white text-black" : "text-neutral-400"
+            }\`}
+          >
+            Create
+          </button>
+          <button
+            onClick={() => setJoin(true)}
+            className={\`flex-1 py-2 text-sm \${
+              join ? "bg-white text-black" : "text-neutral-400"
+            }\`}
+          >
+            Join
+          </button>
+        </div>
+
+        {/* Action */}
+        {join ? (
+          <div className="space-y-3">
+            <input
+              placeholder="Room ID"
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm
+              focus:outline-none focus:ring-1 focus:ring-white/30"
+              onChange={(e) => setRoomId(e.target.value)}
+            />
+            <button
+              onClick={joinRoom}
+              disabled={!name || !roomId}
+              className="w-full bg-white text-black py-2 rounded-md text-sm
+              disabled:opacity-30"
+            >
+              Join Room
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={createRoom}
+            disabled={!name}
+            className="w-full bg-white text-black py-2 rounded-md text-sm
+            disabled:opacity-30"
+          >
+            Create Room
+          </button>
+        )}
+
+        {/* Footer */}
+        <p className="text-[11px] text-center text-neutral-500">
+          Powered by Velyx
+        </p>
+      </div>
     </main>
   );
 }
