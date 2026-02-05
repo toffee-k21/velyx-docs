@@ -329,16 +329,37 @@ export default function Room({ params }: any) {
         </p>
       </div>
 
-      <div className="h-px bg-neutral-800" />
+<section className="space-y-6">
+  <h2 className="text-white text-xl font-medium">
+    Getting Started
+  </h2>
 
-      {/* ---------- Overview ---------- */}
-      <Section title="Overview">
-        <ul className="text-neutral-300 text-sm space-y-2">
-          <li>• A landing page to create or join a room</li>
-          <li>• A room page that subscribes to a chat topic</li>
-          <li>• A backend API route that publishes messages</li>
-        </ul>
-      </Section>
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    {/* Video */}
+    <div className="w-full">
+      <iframe
+        className="w-full aspect-video rounded-lg border border-neutral-800"
+        src="https://www.youtube.com/embed/iASbmxIhxXk"
+        title="Build a Real-Time Chat App"
+        frameBorder="0"
+        allowFullScreen
+      />
+    </div>
+
+    {/* Overview */}
+    <div className="space-y-3">
+      <h3 className="text-white text-lg font-medium">
+        Overview
+      </h3>
+      <ul className="text-neutral-300 text-sm space-y-2">
+        <li>• A landing page to create or join a room</li>
+        <li>• A room page that subscribes to a chat topic</li>
+        <li>• A backend API route that publishes messages</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 
       {/* ---------- Landing Page ---------- */}
       <Section title="1. Landing Page">
